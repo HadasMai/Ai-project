@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!-- res/drawable/edit_text_border.xml -->
+    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+        <solid android:color="#FFFFFF"/> <!-- צבע רקע לבן -->
+        <stroke
+                android:width="2dp"
+                android:color="#FFA500"/> <!-- צבע גבול שחור -->
+        <corners android:radius="4dp"/> <!-- פינות מעוגלות -->
+        <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp"/>
+    </shape>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MyStoryApp</string>
+    <string name="userText">הכנס טקסט</string>
+    <string name="imageButton">צור תמונות</string>
+</resources>

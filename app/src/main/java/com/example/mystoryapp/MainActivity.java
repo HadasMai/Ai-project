@@ -1,0 +1,309 @@
+//
+//package com.example.mystoryapp;
+//
+//import androidx.appcompat.app.AppCompatActivity;
+//import android.app.ProgressDialog;
+//import android.graphics.Bitmap;
+//import android.graphics.BitmapFactory;
+//import android.os.Bundle;
+//import android.util.Log;
+//import android.view.View;
+//import android.widget.Button;
+//import android.widget.EditText;
+//import android.widget.ImageView;
+//import android.widget.Toast;
+//
+//import org.json.JSONObject;
+//
+//import java.io.IOException;
+//import java.io.InputStream;
+//import java.net.HttpURLConnection;
+//import java.net.URL;
+//import java.util.concurrent.TimeUnit;
+//
+//import okhttp3.Call;
+//import okhttp3.Callback;
+//import okhttp3.MediaType;
+//import okhttp3.OkHttpClient;
+//import okhttp3.Request;
+//import okhttp3.RequestBody;
+//import okhttp3.Response;
+//
+//import com.bumptech.glide.Glide;
+//import com.bumptech.glide.request.RequestOptions;
+//
+//public class MainActivity extends AppCompatActivity {
+//
+//    private EditText editTextText2;
+//    private Button button;
+//    private ImageView imageView;
+//    private OkHttpClient client;
+//    private ProgressDialog progressDialog;
+//    private static final String TAG = "MainActivity";
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+//
+//        editTextText2 = findViewById(R.id.editTextText2);
+//        button = findViewById(R.id.button);
+//        imageView = findViewById(R.id.imageView);
+//
+//        client = new OkHttpClient.Builder()
+//                .connectTimeout(0, TimeUnit.SECONDS)
+//                .writeTimeout(0, TimeUnit.SECONDS)
+//                .readTimeout(0, TimeUnit.SECONDS)
+//                .build();
+//
+//        progressDialog = new ProgressDialog(this);
+//        progressDialog.setMessage("Waiting for server response...");
+//        progressDialog.setCancelable(false);
+//
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String text = editTextText2.getText().toString();
+//                sendTextToServer(text);
+//            }
+//        });
+//    }
+//
+//    private void sendTextToServer(String text) {
+//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+//
+//        JSONObject json = new JSONObject();
+//        try {
+//            json.put("data", text);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        RequestBody body = RequestBody.create(json.toString(), JSON);
+//        Request request = new Request.Builder()
+//                .url("http://192.168.240.110:5000/getText")
+//                .post(body)
+//                .build();
+//
+//        progressDialog.show();
+//
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                Log.e(TAG, "Request failed", e);
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        progressDialog.dismiss();
+//                        Toast.makeText(MainActivity.this, "Request Failed", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (response.isSuccessful()) {
+//                    final String responseData = response.body().string();
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            progressDialog.dismiss();
+//                            loadImage(responseData);
+//                        }
+//                    });
+//                } else {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            progressDialog.dismiss();
+//                            Toast.makeText(MainActivity.this, "Response not successful", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//                }
+//            }
+//        });
+//    }
+//
+////    private void loadImage(String url) {
+////        new Thread(new Runnable() {
+////            @Override
+////            public void run() {
+////                try {
+////                    URL imageUrl = new URL(url);
+////                    HttpURLConnection connection = (HttpURLConnection) imageUrl.openConnection();
+////                    connection.setDoInput(true);
+////                    connection.connect();
+////                    InputStream input = connection.getInputStream();
+////                    Bitmap myBitmap = BitmapFactory.decodeStream(input);
+////                    runOnUiThread(new Runnable() {
+////                        @Override
+////                        public void run() {
+////                            imageView.setImageBitmap(myBitmap);
+////                        }
+////                    });
+////                } catch (IOException e) {
+////                    e.printStackTrace();
+////                    runOnUiThread(new Runnable() {
+////                        @Override
+////                        public void run() {
+////                            Toast.makeText(MainActivity.this, "Failed to load image", Toast.LENGTH_SHORT).show();
+////                        }
+////                    });
+////                }
+////            }
+////        }).start();
+////    }
+//    private void loadImage(String url) {
+//        // Use Glide to load the image from the URL into the ImageView
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                RequestOptions requestOptions = new RequestOptions()
+//                        .placeholder(android.R.drawable.ic_menu_gallery) // Placeholder while loading
+//                        .error(android.R.drawable.ic_delete); // Placeholder if image fails to load
+//
+//                Glide.with(MainActivity.this)
+//                        .load(url)
+//                        .apply(requestOptions)
+//                        .into(imageView);
+//            }
+//        });
+//    }
+//}
+package com.example.mystoryapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText editTextText2;
+    private Button button;
+    private ImageView imageView;
+    private OkHttpClient client;
+    private ProgressDialog progressDialog;
+    private static final String TAG = "MainActivity";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        editTextText2 = findViewById(R.id.editTextText2);
+        button = findViewById(R.id.button);
+        imageView = findViewById(R.id.imageView);
+
+        client = new OkHttpClient.Builder()
+                .connectTimeout(0, TimeUnit.SECONDS)
+                .writeTimeout(0, TimeUnit.SECONDS)
+                .readTimeout(0, TimeUnit.SECONDS)
+                .build();
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Waiting for server response...");
+        progressDialog.setCancelable(false);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = editTextText2.getText().toString();
+                sendTextToServer(text);
+            }
+        });
+    }
+
+    private void sendTextToServer(String text) {
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("data", text);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(json.toString(), JSON);
+        Request request = new Request.Builder()
+                .url("http://192.168.240.110:5000/getText")
+                .post(body)
+                .build();
+
+        progressDialog.show();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "Request failed", e);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                        Toast.makeText(MainActivity.this, "Request Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressDialog.dismiss();
+                            loadImage(responseData);
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressDialog.dismiss();
+                            Toast.makeText(MainActivity.this, "Response not successful", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void loadImage(String url) {
+        // Use Glide to load the image from the URL into the ImageView
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                RequestOptions requestOptions = new RequestOptions()
+                        .placeholder(android.R.drawable.ic_menu_gallery) // Placeholder while loading
+                        .error(android.R.drawable.ic_delete); // Placeholder if image fails to load
+
+                Glide.with(MainActivity.this)
+                        .load(url)
+                        .apply(requestOptions)
+                        .into(imageView);
+            }
+        });
+    }
+}
