@@ -172,6 +172,8 @@
 //}
 package com.example.mystoryapp;
 
+import android.graphics.drawable.Drawable;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -182,6 +184,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -274,6 +280,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             progressDialog.dismiss();
+                            Toast.makeText(MainActivity.this, responseData, Toast.LENGTH_SHORT).show();
+
                             loadImage(responseData);
                         }
                     });
@@ -295,13 +303,27 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                String myurl="https://www.yo-yoo.co.il/coolpics/images/uploads/loveityoyo3.jpg";
                 RequestOptions requestOptions = new RequestOptions()
                         .placeholder(android.R.drawable.ic_menu_gallery) // Placeholder while loading
                         .error(android.R.drawable.ic_delete); // Placeholder if image fails to load
 
                 Glide.with(MainActivity.this)
-                        .load(url)
+                        .load(myurl)
+                        .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                         .apply(requestOptions)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                Log.e("GlideError", "Image load failed", e);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                return false;
+                            }
+                        })
                         .into(imageView);
             }
         });
