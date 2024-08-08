@@ -1,6 +1,7 @@
 
 package com.example.mystoryapp;
 
+
 import android.graphics.drawable.Drawable;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +34,11 @@ import okhttp3.Response;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+
+
 
 public class NewPage extends AppCompatActivity {
 
@@ -95,7 +101,7 @@ public class NewPage extends AppCompatActivity {
 
         RequestBody body = RequestBody.create(json.toString(), JSON);
         Request request = new Request.Builder()
-                .url("http://192.168.180.110:5000/getText")
+                .url("http://192.168.246.108:5000/getText")
                 .post(body)
                 .build();
 
