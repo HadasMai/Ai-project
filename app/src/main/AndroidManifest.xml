@@ -48,6 +48,27 @@
                 android:enableOnBackInvokedCallback="true"
                 android:exported="true" >
         </activity>
+
+        <activity
+                android:name=".LoginActivity"
+                android:enableOnBackInvokedCallback="true"
+                android:exported="true" >
+        </activity>
+        <activity
+                android:name=".WelcomePage"
+                android:enableOnBackInvokedCallback="true"
+                android:exported="true" >
+        </activity>
+        <activity
+                android:name=".UserAccount"
+                android:enableOnBackInvokedCallback="true"
+                android:exported="true" >
+        </activity>
+        <activity
+                android:name=".MyBooksHistoryActivity"
+                android:enableOnBackInvokedCallback="true"
+                android:exported="true" >
+        </activity>
     </application>
 
 </manifest>

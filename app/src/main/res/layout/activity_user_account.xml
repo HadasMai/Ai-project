@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".UserAccount">
+
+    <TextView
+            android:id="@+id/welcomeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="ברוך הבא"
+            android:textSize="24sp"
+            android:textColor="@android:color/black" android:layout_alignParentEnd="true"
+            android:layout_marginEnd="144dp"/>
+    <Button
+            android:id="@+id/myBooksHistoryBtn"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/welcomeText"
+            android:layout_marginTop="221dp"
+            android:text="היסטורית ספרים שלי"
+            android:backgroundTint="#FFA500"
+            android:textColor="@android:color/white"
+            android:padding="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="106dp"/>
+    <Button
+            android:id="@+id/createNewBookBtn"
+            android:layout_width="205dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/myBooksHistoryBtn"
+            android:layout_marginTop="30dp"
+            android:text="צור ספר חדש"
+            android:backgroundTint="#FFA500"
+            android:textColor="@android:color/white"
+            android:padding="10dp"/>
+
+</RelativeLayout>

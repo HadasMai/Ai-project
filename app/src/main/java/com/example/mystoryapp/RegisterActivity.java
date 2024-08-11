@@ -38,7 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn = findViewById(R.id.registerBtn);
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Please wait");
+        progressDialog.setTitle("המתן בבקשה");
         progressDialog.setCanceledOnTouchOutside(false);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -59,17 +59,17 @@ public class RegisterActivity extends AppCompatActivity {
         name = nameEt.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
-            emailEt.setError("Enter Email");
+            emailEt.setError("הכנס אימייל");
         } else if (TextUtils.isEmpty(password)) {
-            passwordEt.setError("Enter Password");
+            passwordEt.setError("הכנס סיסמא");
         } else if (TextUtils.isEmpty(name)) {
-            nameEt.setError("Enter Name");
+            nameEt.setError("הכנס שם משתמש");
         } else {
             createUserAccount();
         }
     }
     private void createUserAccount() {
-        progressDialog.setMessage("Creating account...");
+        progressDialog.setMessage("יוצר חשבון חדש....");
         progressDialog.show();
 
         firebaseAuth.createUserWithEmailAndPassword(email, password)
@@ -89,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void updateUserInfo() {
-        progressDialog.setMessage("Saving user info...");
+        progressDialog.setMessage("שומר פרטי משתמש....");
 
         long timestamp = System.currentTimeMillis();
         String uid = firebaseAuth.getUid();
@@ -110,8 +110,8 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void unused) {
                         progressDialog.dismiss();
-                        Toast.makeText(RegisterActivity.this, "Account created...", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(RegisterActivity.this, HeroStoryQuestions.class));
+                        Toast.makeText(RegisterActivity.this, "החשבון נוצר...", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(RegisterActivity.this, UserAccount.class));
                         finish();
                     }
                 })

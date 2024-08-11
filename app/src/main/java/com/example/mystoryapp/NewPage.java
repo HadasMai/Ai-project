@@ -67,7 +67,7 @@ public class NewPage extends AppCompatActivity {
                 .build();
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Waiting for server response...");
+        progressDialog.setMessage("מכינים את התמונה עבורך, פעולה זו עשויה להימשך מספר שניות...");
         progressDialog.setCancelable(false);
 
         button.setOnClickListener(new View.OnClickListener() {
