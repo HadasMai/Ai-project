@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <EditText
+            android:id="@+id/religionEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="דת"
+            android:importantForAccessibility="yes"/>
+
+    <EditText
+            android:id="@+id/clothingDescriptionEt"
+            android:layout_width="379dp"
+            android:layout_height="276dp"
+            android:layout_weight="1"
+            android:hint="תיאור לבוש של גיבור הסיפור"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:minLines="10"
+            android:importantForAccessibility="yes"/>
+
+    <Button
+            android:id="@+id/submitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="המשך"
+            android:backgroundTint="#FFA500"
+            android:importantForAccessibility="yes"/>
+</LinearLayout>

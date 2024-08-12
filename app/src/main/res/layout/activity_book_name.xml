@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="מהו שם הספר שלך?"
+            android:textSize="18sp"
+            android:paddingBottom="8dp"
+            android:importantForAccessibility="yes"/>
+
+    <EditText
+            android:id="@+id/bookNameEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="שם הספר"
+            android:importantForAccessibility="yes"/>
+    <Button
+            android:id="@+id/submitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="התחל לכתוב את הסיפור"
+            android:backgroundTint="#FFA500"
+            android:importantForAccessibility="yes"/>
+</LinearLayout>

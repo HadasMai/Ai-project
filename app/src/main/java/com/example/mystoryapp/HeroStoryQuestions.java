@@ -81,7 +81,9 @@ public class HeroStoryQuestions extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveHeroDetails();
-                Intent intent = new Intent(HeroStoryQuestions.this, UserAccount.class);
+                Intent intent = new Intent(HeroStoryQuestions.this, DescribeHero.class);
+                // Pass the bookId to HeroStoryQuestions
+                intent.putExtra("bookId", bookId);
                 startActivity(intent);
             }
         });

@@ -2,4 +2,10 @@
     <string name="app_name">MyStoryApp</string>
     <string name="userText">הכנס טקסט</string>
     <string name="imageButton">צור תמונות</string>
+    <string-array name="hair_types">
+        <item>מתולתל</item>
+        <item>חלק</item>
+        <item>גלי</item>
+        <item>שיער אפרו</item>
+    </string-array>
 </resources>

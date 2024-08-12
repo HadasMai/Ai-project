@@ -69,6 +69,21 @@
                 android:enableOnBackInvokedCallback="true"
                 android:exported="true" >
         </activity>
+        <activity
+                android:name=".DescribeHero"
+                android:enableOnBackInvokedCallback="true"
+                android:exported="true" >
+        </activity>
+        <activity
+                android:name=".ClothingDescription"
+                android:enableOnBackInvokedCallback="true"
+                android:exported="true" >
+        </activity>
+        <activity
+                android:name=".BookName"
+                android:enableOnBackInvokedCallback="true"
+                android:exported="true" >
+        </activity>
     </application>
 
 </manifest>

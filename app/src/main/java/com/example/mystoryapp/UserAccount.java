@@ -150,6 +150,19 @@ public class UserAccount extends AppCompatActivity {
         booksRef = FirebaseDatabase.getInstance("https://mystory-2784d-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference("Books");
 
+        // בדיקת חיבור משתמש ל-Firebase
+        if (firebaseAuth.getCurrentUser() == null) {
+            Toast.makeText(UserAccount.this, "אין חיבור למשתמש", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(UserAccount.this, LoginActivity.class));
+            finish();
+            return;
+        }
+
+        // אתחול המשתנה userRef
+        String uid = firebaseAuth.getUid();
+        userRef = FirebaseDatabase.getInstance("https://mystory-2784d-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference("Users").child(uid);
+
         loadUserInfo();
 
         createNewBookBtn.setOnClickListener(new View.OnClickListener() {
@@ -159,7 +172,6 @@ public class UserAccount extends AppCompatActivity {
             }
         });
     }
-
     private void loadUserInfo() {
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -178,7 +190,6 @@ public class UserAccount extends AppCompatActivity {
             }
         });
     }
-
 
     private void createNewBook() {
         String uid = firebaseAuth.getUid();
@@ -212,6 +223,7 @@ public class UserAccount extends AppCompatActivity {
                 });
     }
 }
+
 //package com.example.mystoryapp;
 //
 //import android.content.Intent;

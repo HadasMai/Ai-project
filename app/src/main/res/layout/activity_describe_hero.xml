@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <EditText
+            android:id="@+id/ageEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="גיל"
+            android:inputType="number"
+            android:importantForAccessibility="yes"/>
+
+    <EditText
+            android:id="@+id/hairColorEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="צבע שיער"
+            android:importantForAccessibility="yes"/>
+
+    <Spinner
+            android:id="@+id/hairTypeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/hair_types"
+            android:importantForAccessibility="yes"/>
+
+    <EditText
+            android:id="@+id/eyeColorEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="צבע עיניים"
+            android:importantForAccessibility="yes"/>
+
+    <EditText
+            android:id="@+id/skinColorEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="צבע עור"
+            android:importantForAccessibility="yes"/>
+
+    <Button
+            android:id="@+id/submitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="המשך"
+            android:backgroundTint="#FFA500"
+            android:importantForAccessibility="yes"/>
+</LinearLayout>
