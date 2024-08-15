@@ -44,6 +44,8 @@ public class NewPage extends AppCompatActivity {
     private EditText editTextText2;
     private Button button;
     private Button reloadButton;
+    private Button buttonPrevPage;
+    private Button buttonNextPage;
     private ImageView imageView;
     private OkHttpClient client;
     private ProgressDialog progressDialog;
@@ -54,6 +56,8 @@ public class NewPage extends AppCompatActivity {
     private String bookId;
     private String descriptionOfTheHeroOfStory;
     private String lastGeneratedUrl;
+    private long currentPageNumber;
+    private String pageId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,8 @@ public class NewPage extends AppCompatActivity {
         editTextText2 = findViewById(R.id.editTextText2);
         button = findViewById(R.id.button);
         reloadButton = findViewById(R.id.reloadButton);
+        buttonPrevPage = findViewById(R.id.buttonPrevPage);
+        buttonNextPage = findViewById(R.id.buttonNextPage);
         imageView = findViewById(R.id.imageView);
 
         client = new OkHttpClient.Builder()
@@ -95,7 +101,7 @@ public class NewPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String text = editTextText2.getText().toString();
-                sendTextToServer( descriptionOfTheHeroOfStory + text);
+                sendTextToServer(descriptionOfTheHeroOfStory + text);
             }
         });
 
@@ -104,6 +110,22 @@ public class NewPage extends AppCompatActivity {
             public void onClick(View v) {
                 // Add new page to Firebase
                 addNewPageToFirebase();
+            }
+        });
+
+        buttonPrevPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPageNumber > 1) {
+                    loadPage(currentPageNumber - 1);
+                }
+            }
+        });
+
+        buttonNextPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadPage(currentPageNumber + 1);
             }
         });
     }
@@ -162,7 +184,7 @@ public class NewPage extends AppCompatActivity {
 
         RequestBody body = RequestBody.create(json.toString(), JSON);
         Request request = new Request.Builder()
-                .url("http://192.168.18.117:5000/getText")
+                .url("http://192.168.223.110:5000/getText")
                 .post(body)
                 .build();
 
@@ -180,6 +202,7 @@ public class NewPage extends AppCompatActivity {
                     }
                 });
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
@@ -247,18 +270,27 @@ public class NewPage extends AppCompatActivity {
             public void onDataChange(@Nullable DataSnapshot snapshot) {
                 long pageCount = snapshot.getChildrenCount();
                 String pageId = pagesRef.push().getKey(); // Generate a unique page ID
+
                 if (pageId != null) {
                     HashMap<String, Object> pageData = new HashMap<>();
                     pageData.put("bookId", bookId);
                     pageData.put("pageId", pageId);
                     pageData.put("text", editTextText2.getText().toString());
                     pageData.put("url", lastGeneratedUrl);
-                    pageData.put("style", ""); // You can customize the style if needed
+                    pageData.put("style", ""); // we need to customize the style
                     pageData.put("pageNumber", pageCount + 1);
 
                     pagesRef.child(pageId).setValue(pageData)
-                            .addOnSuccessListener(aVoid -> Toast.makeText(NewPage.this, "Page added successfully", Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(NewPage.this, "Failed to add page", Toast.LENGTH_SHORT).show());
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(NewPage.this, "New page added successfully", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(NewPage.this, NewPage.class);
+                                intent.putExtra("bookId", bookId);
+                                intent.putExtra("pageId", pageId);
+                                intent.putExtra("pageNumber", pageCount + 1);
+                                startActivity(intent);
+                                finish();
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(NewPage.this, "Failed to add new page", Toast.LENGTH_SHORT).show());
                 } else {
                     Toast.makeText(NewPage.this, "Failed to generate page ID", Toast.LENGTH_SHORT).show();
                 }
@@ -270,7 +302,61 @@ public class NewPage extends AppCompatActivity {
             }
         });
     }
+
+    private void loadPage(long pageNumber) {
+        pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@Nullable DataSnapshot snapshot) {
+                for (DataSnapshot pageSnapshot : snapshot.getChildren()) {
+                    Long pgNumber = pageSnapshot.child("pageNumber").getValue(Long.class);
+                    if (pgNumber != null && pgNumber == pageNumber) {
+                        String pgId = pageSnapshot.child("pageId").getValue(String.class);
+                        String text = pageSnapshot.child("text").getValue(String.class);
+                        String url = pageSnapshot.child("url").getValue(String.class);
+
+                        // Update the EditText with the retrieved text
+                        editTextText2.setText(text);
+
+                        // Load the image with the retrieved URL
+                        loadImage(url);
+
+                        // Update the pageId and currentPageNumber to reflect the loaded page
+                        pageId = pgId;
+                        currentPageNumber = pageNumber;
+
+                        // Update the navigation buttons
+                        updateNavigationButtons();
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@Nullable DatabaseError error) {
+                Toast.makeText(NewPage.this, "Failed to load page", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateNavigationButtons() {
+        buttonPrevPage.setVisibility(currentPageNumber > 1 ? View.VISIBLE : View.GONE);
+        pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@Nullable DataSnapshot snapshot) {
+                long totalPages = snapshot.getChildrenCount();
+                buttonNextPage.setVisibility(currentPageNumber < totalPages ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@Nullable DatabaseError error) {
+                Toast.makeText(NewPage.this, "Failed to update navigation buttons", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
+
+
+
 
 
 //

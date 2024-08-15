@@ -9,9 +9,8 @@
 
     <EditText
             android:id="@+id/editTextText2"
-            android:layout_width="322dp"
-            android:layout_height="214dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="309dp"
+            android:layout_height="166dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:inputType="textMultiLine"
@@ -20,8 +19,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/button"
-            app:layout_constraintHeight_percent="0.5" app:layout_constraintHorizontal_bias="0.666"/>
+            app:layout_constraintHeight_percent="0.5" android:layout_marginTop="68dp"/>
     <Button
             android:id="@+id/button"
             android:layout_width="116dp"
@@ -30,34 +28,59 @@
             app:layout_constraintTop_toBottomOf="@+id/editTextText2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/imageView"
-            android:layout_marginTop="16dp"
             android:backgroundTint="#FFA500"
-            android:layout_marginBottom="16dp" app:layout_constraintHorizontal_bias="0.498"/>
-
+            app:layout_constraintHorizontal_bias="0.498" android:layout_marginTop="40dp"/>
     <Button
             android:id="@+id/reloadButton"
             android:layout_width="179dp"
             android:layout_height="39dp"
             android:text="צור דף חדש"
-            app:layout_constraintTop_toBottomOf="@+id/button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/imageView"
-            android:layout_marginTop="16dp"
             android:backgroundTint="#FFA500"
-            android:layout_marginBottom="16dp" app:layout_constraintHorizontal_bias="0.498"/>
-    />
+            tools:ignore="MissingConstraints" app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintBottom_toTopOf="@+id/buttonNextPage"/>
 
+    <!-- כפתור חץ שמאלי -->
+
+    <!-- כפתור חץ ימני -->
     <ImageView
             android:id="@+id/imageView"
-            android:layout_width="338dp"
-            android:layout_height="280dp"
+            android:layout_width="326dp"
+            android:layout_height="261dp"
             android:scaleType="centerCrop"
-            app:layout_constraintTop_toBottomOf="@+id/button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:contentDescription="Generated Image" app:layout_constraintHorizontal_bias="0.219"/>
+            android:contentDescription="Generated Image"
+            app:layout_constraintHorizontal_bias="0.494"
+            tools:ignore="MissingConstraints" app:layout_constraintTop_toBottomOf="@+id/button"
+            android:layout_marginTop="8dp"/>
+    <Button
+            android:id="@+id/buttonPrevPage"
+            android:layout_width="70dp"
+            android:layout_height="52dp"
+            android:text="→"
+            android:textSize="25sp"
+            android:backgroundTint="#FFA500"
+            android:layout_marginStart="36dp"
+            android:layout_marginBottom="16dp"
+            android:layout_gravity="center"
+            android:textColor="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@+id/reloadButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.512"/>
+    <Button
+            android:id="@+id/buttonNextPage"
+            android:layout_width="70dp"
+            android:layout_height="52dp"
+            android:text="←"
+            android:textColorHighlight="@color/buttonColor"
+            android:textSize="24sp"
+            android:backgroundTint="#FFA500"
+            android:layout_marginEnd="32dp"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="32dp"
+            app:layout_constraintStart_toEndOf="@+id/buttonPrevPage" app:layout_constraintHorizontal_bias="0.99"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
