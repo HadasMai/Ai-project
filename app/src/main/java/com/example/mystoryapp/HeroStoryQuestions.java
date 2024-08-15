@@ -169,13 +169,13 @@ public class HeroStoryQuestions extends AppCompatActivity {
                 editTextAnimalType.setVisibility(View.GONE);
                 int id = v.getId();
                 if (id == R.id.button_child) {
-                    characterType = "ילד";
+                    characterType = "boy";
                 } else if (id == R.id.button_girl) {
-                    characterType = "ילדה";
+                    characterType = "girl";
                 } else if (id == R.id.button_man) {
-                    characterType = "איש";
+                    characterType = "man";
                 } else if (id == R.id.button_woman) {
-                    characterType = "אישה";
+                    characterType = "woman";
                 }
             }
         };
