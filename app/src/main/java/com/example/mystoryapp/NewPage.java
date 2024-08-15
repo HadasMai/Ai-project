@@ -94,6 +94,8 @@ public class NewPage extends AppCompatActivity {
                 .getReference("pages");
 
         fetchDataFromFirebase();
+        createNewPageInFirebase();
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,28 +149,19 @@ public class NewPage extends AppCompatActivity {
                         String clothingDescription = snapshot.child("clothingDescription").getValue(String.class);
                         String religion = snapshot.child("religion").getValue(String.class);
 
-//                        descriptionOfTheHeroOfStory = "הדמות הראשית היא " + heroName + " שהיא " + characterType +
-//                                " בגיל " + age + ", וצבע העור שלה " + skinColor +
-//                                ", עם עיניים " + eyeColor + " ושיער " + hairType +
-//                                " בצבע " + hairColor + ", ולובשת " + clothingDescription +
-//                                " והיא " + religion;
-
                         if (characterType.equals("man") || characterType.equals("boy")) {
                             descriptionOfTheHeroOfStory = "הדמות הראשית הוא " + heroName + " שהוא " + characterType +
-                                " בגיל " + age + ", וצבע העור שלו " + skinColor +
-                                ", עם עיניים " + eyeColor + " ושיער " + hairType +
-                                " בצבע " + hairColor + ", ולובש " + clothingDescription +
-                                " והוא " + religion;
-
+                                    " בגיל " + age + ", וצבע העור שלו " + skinColor +
+                                    ", עם עיניים " + eyeColor + " ושיער " + hairType +
+                                    " בצבע " + hairColor + ", ולובש " + clothingDescription +
+                                    " והוא " + religion;
                         } else if (characterType.equals("woman") || characterType.equals("girl")) {
                             descriptionOfTheHeroOfStory = "הדמות הראשית היא " + heroName + " שהיא " + characterType +
-                                " בגיל " + age + ", וצבע העור שלה " + skinColor +
-                                ", עם עיניים " + eyeColor + " ושיער " + hairType +
-                                " בצבע " + hairColor + ", ולובשת " + clothingDescription +
-                                " והיא " + religion;
+                                    " בגיל " + age + ", וצבע העור שלה " + skinColor +
+                                    ", עם עיניים " + eyeColor + " ושיער " + hairType +
+                                    " בצבע " + hairColor + ", ולובשת " + clothingDescription +
+                                    " והיא " + religion;
                         }
-
-
                     } else {
                         String animalType = snapshot.child("animalType").getValue(String.class);
                         descriptionOfTheHeroOfStory = heroName + " הוא חיה מסוג: " + animalType;
@@ -183,6 +176,38 @@ public class NewPage extends AppCompatActivity {
             public void onCancelled(@Nullable DatabaseError error) {
                 descriptionOfTheHeroOfStory = "";
                 Toast.makeText(NewPage.this, "Failed to retrieve data from Firebase", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void createNewPageInFirebase() {
+        pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@Nullable DataSnapshot snapshot) {
+                long pageCount = snapshot.getChildrenCount();
+                pageId = pagesRef.push().getKey(); // Generate a unique page ID
+
+                if (pageId != null) {
+                    HashMap<String, Object> pageData = new HashMap<>();
+                    pageData.put("bookId", bookId);
+                    pageData.put("pageId", pageId);
+                    pageData.put("pageNumber", pageCount + 1);
+
+                    pagesRef.child(pageId).setValue(pageData)
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(NewPage.this, "New page created", Toast.LENGTH_SHORT).show();
+                                currentPageNumber = pageCount + 1;
+                                updateNavigationButtons();
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(NewPage.this, "Failed to create new page", Toast.LENGTH_SHORT).show());
+                } else {
+                    Toast.makeText(NewPage.this, "Failed to generate page ID", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@Nullable DatabaseError error) {
+                Toast.makeText(NewPage.this, "Failed to retrieve page count", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -232,8 +257,8 @@ public class NewPage extends AppCompatActivity {
                             Log.d(TAG, "Server response: " + responseData);
                             loadImage(responseData);
 
-                            // Save the page data to Firebase immediately after receiving the URL
-                            addNewPageToFirebase(editTextText2.getText().toString(), lastGeneratedUrl);
+                            // Update the existing page in Firebase
+                            updatePageInFirebase(editTextText2.getText().toString(), lastGeneratedUrl);
                         }
                     });
                 } else {
@@ -280,58 +305,40 @@ public class NewPage extends AppCompatActivity {
                 .into(imageView);
     }
 
-    private void addNewPageToFirebase(final String text, final String url) {
-        pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@Nullable DataSnapshot snapshot) {
-                long pageCount = snapshot.getChildrenCount();
-                String pageId = pagesRef.push().getKey(); // Generate a unique page ID
+    private void updatePageInFirebase(final String text, final String url) {
+        if (pageId != null) {
+            HashMap<String, Object> pageData = new HashMap<>();
+            pageData.put("text", text);
+            pageData.put("url", url);
+            pageData.put("style", "");
 
-                if (pageId != null) {
-                    HashMap<String, Object> pageData = new HashMap<>();
-                    pageData.put("bookId", bookId);
-                    pageData.put("pageId", pageId);
-                    pageData.put("text", text);
-                    pageData.put("url", url);
-                    pageData.put("style", ""); // we need to customize the style
-                    pageData.put("pageNumber", pageCount + 1);
-
-                    pagesRef.child(pageId).setValue(pageData)
-                            .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(NewPage.this, "Page saved successfully", Toast.LENGTH_SHORT).show();
-                                currentPageNumber = pageCount + 1;
-                                updateNavigationButtons();
-                            })
-                            .addOnFailureListener(e -> Toast.makeText(NewPage.this, "Failed to save page", Toast.LENGTH_SHORT).show());
-                } else {
-                    Toast.makeText(NewPage.this, "Failed to generate page ID", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@Nullable DatabaseError error) {
-                Toast.makeText(NewPage.this, "Failed to retrieve page count", Toast.LENGTH_SHORT).show();
-            }
-        });
+            pagesRef.child(pageId).updateChildren(pageData)
+                    .addOnSuccessListener(aVoid -> Toast.makeText(NewPage.this, "Page updated successfully", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(NewPage.this, "Failed to update page", Toast.LENGTH_SHORT).show());
+        } else {
+            Toast.makeText(NewPage.this, "Page ID is null", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadPage(long pageNumber) {
+        // בדוק ועדכן את הטקסט של העמוד הנוכחי לפני שעוברים לעמוד חדש
+        updateCurrentPageText();
         pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@Nullable DataSnapshot snapshot) {
                 for (DataSnapshot pageSnapshot : snapshot.getChildren()) {
                     Long pgNumber = pageSnapshot.child("pageNumber").getValue(Long.class);
                     if (pgNumber != null && pgNumber == pageNumber) {
-                        String pgId = pageSnapshot.child("pageId").getValue(String.class);
+                        pageId = pageSnapshot.getKey();
                         String text = pageSnapshot.child("text").getValue(String.class);
                         String url = pageSnapshot.child("url").getValue(String.class);
 
                         editTextText2.setText(text);
-                        loadImage(url);
+                        if (url != null && !url.isEmpty()) {
+                            loadImage(url);
+                        }
 
-                        pageId = pgId;
                         currentPageNumber = pageNumber;
-
                         updateNavigationButtons();
                         break;
                     }
@@ -343,6 +350,29 @@ public class NewPage extends AppCompatActivity {
                 Toast.makeText(NewPage.this, "Failed to load page", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateCurrentPageText() {
+        if (pageId != null) {
+            String currentText = editTextText2.getText().toString();
+            pagesRef.child(pageId).child("text").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@Nullable DataSnapshot snapshot) {
+                    String dbText = snapshot.getValue(String.class);
+                    if (dbText != null && !dbText.equals(currentText)) {
+                        // עדכן את הטקסט ב-Firebase אם הוא שונה ממה שיש ב-EditText
+                        pagesRef.child(pageId).child("text").setValue(currentText)
+                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Text updated in Firebase"))
+                                .addOnFailureListener(e -> Log.e(TAG, "Failed to update text in Firebase", e));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@Nullable DatabaseError error) {
+                    Log.e(TAG, "Failed to read text from Firebase", error.toException());
+                }
+            });
+        }
     }
 
     private void updateNavigationButtons() {
