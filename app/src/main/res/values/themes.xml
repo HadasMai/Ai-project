@@ -1,8 +1,32 @@
+<!--<resources xmlns:tools="http://schemas.android.com/tools">-->
+<!--    &lt;!&ndash; Base application theme. &ndash;&gt;-->
+<!--    <style name="Base.Theme.MyStoryApp" parent="Theme.Material3.DayNight.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your light theme here. &ndash;&gt;-->
+<!--        &lt;!&ndash; <item name="colorPrimary">@color/my_light_primary</item> &ndash;&gt;-->
+<!--        <item name="android:statusBarColor">-->
+<!--            @android:color/transparent-->
+<!--        </item>-->
+
+<!--    </style>-->
+<!--    <style name="Theme.MyStoryApp" parent="Base.Theme.MyStoryApp"/>-->
+
+<!--&lt;!&ndash;    <style name="Theme.MyStoryApp" parent="Base.Theme.MyStoryApp">&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="android:statusBarColor">&ndash;&gt;-->
+<!--&lt;!&ndash;            @android:color/transparent&ndash;&gt;-->
+<!--&lt;!&ndash;        </item>&ndash;&gt;-->
+<!--&lt;!&ndash;    </style>&ndash;&gt;-->
+<!--</resources>-->
+
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MyStoryApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+<!--        <item name="android:windowLightStatusBar">true</item>-->
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:enforceStatusBarContrast" >false</item>
+
     </style>
 
     <style name="Theme.MyStoryApp" parent="Base.Theme.MyStoryApp"/>

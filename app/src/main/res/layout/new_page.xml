@@ -5,6 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/watercolor_orange"
         tools:context=".NewPage">
 
     <EditText
@@ -74,7 +75,6 @@
             android:layout_width="70dp"
             android:layout_height="52dp"
             android:text="←"
-            android:textColorHighlight="@color/buttonColor"
             android:textSize="25sp"
             android:backgroundTint="#FFA500"
             android:layout_marginStart="36dp"
@@ -94,7 +94,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/reloadButton"
             app:layout_constraintEnd_toStartOf="@+id/buttonNextPage"
-            app:layout_constraintStart_toEndOf="@+id/buttonPrevPage" app:layout_constraintHorizontal_bias="0.42"
-            app:layout_constraintVertical_bias="0.457"/>
+            app:layout_constraintStart_toEndOf="@+id/buttonPrevPage" app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintVertical_bias="0.275"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

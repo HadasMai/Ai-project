@@ -46,6 +46,7 @@ public class NewPage extends AppCompatActivity {
     private Button reloadButton;
     private Button buttonPrevPage;
     private Button buttonNextPage;
+    private Button buttonFinish;
     private ImageView imageView;
     private OkHttpClient client;
     private ProgressDialog progressDialog;
@@ -70,6 +71,7 @@ public class NewPage extends AppCompatActivity {
         buttonPrevPage = findViewById(R.id.buttonPrevPage);
         buttonNextPage = findViewById(R.id.buttonNextPage);
         imageView = findViewById(R.id.imageView);
+        buttonFinish=findViewById(R.id.EndButton);
 
         client = new OkHttpClient.Builder()
                 .connectTimeout(0, TimeUnit.SECONDS)
@@ -111,6 +113,15 @@ public class NewPage extends AppCompatActivity {
                 intent.putExtra("bookId", bookId);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        buttonFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NewPage.this, BookCoverActivity.class);
+                intent.putExtra("bookId", bookId);
+                startActivity(intent);
             }
         });
 
@@ -224,7 +235,7 @@ public class NewPage extends AppCompatActivity {
 
         RequestBody body = RequestBody.create(json.toString(), JSON);
         Request request = new Request.Builder()
-                .url("http://192.168.223.110:5000/getText")
+                .url("http://192.168.215.110:5000/getText")
                 .post(body)
                 .build();
 

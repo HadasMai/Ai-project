@@ -84,6 +84,16 @@
                 android:enableOnBackInvokedCallback="true"
                 android:exported="true" >
         </activity>
+        <activity
+                android:name=".ViewBook"
+                android:enableOnBackInvokedCallback="true"
+                android:exported="true" >
+        </activity>
+        <activity
+                android:name=".BookCoverActivity"
+                android:enableOnBackInvokedCallback="true"
+                android:exported="true" >
+        </activity>
     </application>
 
 </manifest>
