@@ -235,7 +235,7 @@ public class NewPage extends AppCompatActivity {
 
         RequestBody body = RequestBody.create(json.toString(), JSON);
         Request request = new Request.Builder()
-                .url("http://192.168.215.110:5000/getText")
+                .url("http://192.168.73.55:5000/getText")
                 .post(body)
                 .build();
 
