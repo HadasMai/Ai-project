@@ -9,12 +9,10 @@ android {
 
     defaultConfig {
         applicationId "com.example.mystoryapp"
-        minSdk 30
-        minSdkVersion 33
+        minSdk 30  // השארנו את זה כי זה הערך הנמוך יותר
         targetSdk 34
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -24,32 +22,45 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    // הוספנו את זה כדי לעזור עם בעיות מיזוג Manifest
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
 }
 
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:32.2.2')  // עדכנו לגרסה האחרונה
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-storage'
+    implementation 'com.google.firebase:firebase-auth'
+
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'  // עדכנו לגרסה האחרונה
+    implementation 'com.google.android.material:material:1.12.0'  // עדכנו לגרסה האחרונה
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-
-    implementation 'com.github.bumptech.glide:glide:4.14.2'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
     implementation 'com.cloudinary:cloudinary-android:2.8.0'
+    implementation 'com.itextpdf:itext7-core:7.2.3'
 
-    implementation 'com.google.firebase:firebase-database:21.0.0'
-    implementation 'com.google.firebase:firebase-firestore:25.0.0'
-    implementation 'com.google.firebase:firebase-storage:21.0.0'
-    implementation 'com.google.firebase:firebase-auth:23.0.0'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
-    implementation platform('com.google.firebase:firebase-bom:33.1.1')
-    implementation 'com.google.firebase:firebase-analytics:22.0.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    implementation 'org.slf4j:slf4j-android:1.7.32'
 
 }

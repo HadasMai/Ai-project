@@ -52,7 +52,6 @@
             android:layout_width="70dp"
             android:layout_height="52dp"
             android:text="←"
-            android:textColorHighlight="@color/buttonColor"
             android:textSize="25sp"
             android:backgroundTint="#FFA500"
             android:layout_marginStart="36dp"
@@ -63,5 +62,16 @@
             app:layout_constraintStart_toEndOf="@+id/buttonPrevPage" app:layout_constraintHorizontal_bias="0.785"
             app:layout_constraintTop_toBottomOf="@+id/imageStory" app:layout_constraintVertical_bias="0.729"/>
 
-
+    <Button
+            android:id="@+id/exportPdfButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Export PDF"
+            android:backgroundTint="#0048FF"
+            android:layout_below="@id/buttonNextPage"
+            android:layout_centerHorizontal="true"
+            app:layout_constraintTop_toBottomOf="@+id/imageStory"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.512"
+            app:layout_constraintEnd_toStartOf="@+id/buttonNextPage" android:layout_marginEnd="24dp"
+            app:layout_constraintStart_toEndOf="@+id/buttonPrevPage" app:layout_constraintHorizontal_bias="0.95"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
