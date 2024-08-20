@@ -1,8 +1,8 @@
 package com.example.mystoryapp;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -11,39 +11,43 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.properties.BaseDirection;
+import com.itextpdf.layout.properties.TextAlignment;
+//import com.itextpdf.layout.property.TextAlignment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import android.os.Handler;
-import android.os.Looper;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import com.itextpdf.io.util.StreamUtil;
 
 public class PDFExporter {
 
     public static void exportBookToPDF(Context context, List<ViewBook.Page> pages, String bookName) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Handler handler = new Handler(Looper.getMainLooper());
 
         executor.execute(() -> {
             try {
@@ -65,38 +69,63 @@ public class PDFExporter {
 
                 PdfWriter writer = new PdfWriter(new FileOutputStream(pdfFile));
                 PdfDocument pdf = new PdfDocument(writer);
-                Document document = new Document(pdf, PageSize.A4);
+                Document document = new Document(pdf);
+
+                // Load the font using AssetManager
+                AssetManager assetManager = context.getAssets();
+                PdfFont hebrewFont;
+
+                try (InputStream fontStream = assetManager.open("fonts/DGL_Hollywood.ttf")) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = fontStream.read(buffer)) != -1) {
+                        baos.write(buffer, 0, length);
+                    }
+                    byte[] fontBytes = baos.toByteArray();
+                    hebrewFont = PdfFontFactory.createFont(fontBytes, PdfEncodings.IDENTITY_H);
+                }
 
                 for (ViewBook.Page page : pages) {
                     Log.d("PDFExporter", "Processing page " + page.getPageNumber());
-                    document.add(new Paragraph(page.getText()));
-                    document.add(new Paragraph(" "));
+
+                    // Create a new paragraph with RTL direction
+                    Paragraph paragraph = new Paragraph()
+                            .setFont(hebrewFont)
+                            .setFontSize(12)
+                            .setTextAlignment(TextAlignment.RIGHT)
+                            .setBaseDirection(BaseDirection.RIGHT_TO_LEFT);
+// Add each character in reverse order
+                    String pageText = page.getText();
+                    for (int i = pageText.length() - 1; i >= 0; i--) {
+                        paragraph.add(String.valueOf(pageText.charAt(i)));
+                    }
+
+                    document.add(paragraph);
+                    document.add(new Paragraph(" ")); // Space between text and image
 
                     if (page.getUrl() != null && !page.getUrl().isEmpty()) {
                         try {
-                            // הסרת גרשיים כפולים מה-URL
                             String cleanUrl = page.getUrl().replace("\"", "");
                             Log.d("PDFExporter", "Fetching image from URL: " + cleanUrl);
                             CountDownLatch latch = new CountDownLatch(1);
                             final Bitmap[] bitmapHolder = new Bitmap[1];
 
-                            handler.post(() -> {
-                                Glide.with(context)
-                                        .asBitmap()
-                                        .load(cleanUrl)  // שימוש ב-URL נקי
-                                        .into(new CustomTarget<Bitmap>() {
-                                            @Override
-                                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                                bitmapHolder[0] = resource;
-                                                latch.countDown();
-                                            }
+                            Glide.with(context)
+                                    .asBitmap()
+                                    .load(cleanUrl)
+                                    .into(new CustomTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                            bitmapHolder[0] = resource;
+                                            latch.countDown();
+                                        }
 
-                                            @Override
-                                            public void onLoadCleared(@Nullable Drawable placeholder) {
-                                                latch.countDown();
-                                            }
-                                        });
-                            });
+                                        @Override
+                                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                                            latch.countDown();
+                                        }
+                                    });
 
                             latch.await();
 
@@ -110,7 +139,9 @@ public class PDFExporter {
 
                                 document.add(image);
                             }
-                        } catch (Exception e) {
+                        }
+
+                        catch (Exception e) {
                             Log.e("PDFExporter", "Error processing image: " + e.getMessage());
                         }
                     }
@@ -123,18 +154,16 @@ public class PDFExporter {
                 document.close();
                 Log.d("PDFExporter", "PDF created successfully");
 
-                // After PDF is generated
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     ContentValues values = new ContentValues();
                     values.put(MediaStore.MediaColumns.DISPLAY_NAME, bookName + ".pdf");
                     values.put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf");
                     values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
 
-                    ContentResolver resolver = context.getContentResolver();
-                    Uri uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+                    Uri uri = context.getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
 
                     if (uri != null) {
-                        try (OutputStream os = resolver.openOutputStream(uri);
+                        try (OutputStream os = context.getContentResolver().openOutputStream(uri);
                              FileInputStream fis = new FileInputStream(pdfFile)) {
                             byte[] buffer = new byte[1024];
                             int length;
@@ -147,15 +176,11 @@ public class PDFExporter {
                     Log.d("PDFExporter", "PDF saved to Downloads folder");
                 }
 
-                handler.post(() -> {
-                    Toast.makeText(context, "PDF exported successfully", Toast.LENGTH_LONG).show();
-                });
+                Toast.makeText(context, "PDF exported successfully", Toast.LENGTH_LONG).show();
 
             } catch (Exception e) {
                 Log.e("PDFExporter", "Error exporting PDF: " + e.getMessage(), e);
-                handler.post(() -> {
-                    Toast.makeText(context, "Failed to export PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
+                Toast.makeText(context, "Failed to export PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
