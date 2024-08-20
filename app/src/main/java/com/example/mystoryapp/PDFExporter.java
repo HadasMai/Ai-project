@@ -1,5 +1,6 @@
 package com.example.mystoryapp;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -43,26 +44,26 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.itextpdf.io.util.StreamUtil;
-
 public class PDFExporter {
 
-    public static void exportBookToPDF(Context context, List<ViewBook.Page> pages, String bookName) {
+    public static void exportBookToPDF(Activity activity, List<ViewBook.Page> pages, String bookName) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         executor.execute(() -> {
             try {
                 Log.d("PDFExporter", "Starting PDF export for book: " + bookName);
 
+                String fileName = bookName + "_" + System.currentTimeMillis() + ".pdf";
                 File pdfFile;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    File appSpecificExternalDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "MyStoryApp");
+                    File appSpecificExternalDir = new File(activity.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "MyStoryApp");
                     if (!appSpecificExternalDir.exists()) {
                         appSpecificExternalDir.mkdirs();
                     }
-                    pdfFile = new File(appSpecificExternalDir, bookName + ".pdf");
+                    pdfFile = new File(appSpecificExternalDir, fileName);
                 } else {
                     File pdfFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                    pdfFile = new File(pdfFolder, bookName + ".pdf");
+                    pdfFile = new File(pdfFolder, fileName);
                 }
 
                 Log.d("PDFExporter", "PDF will be saved to: " + pdfFile.getAbsolutePath());
@@ -71,8 +72,7 @@ public class PDFExporter {
                 PdfDocument pdf = new PdfDocument(writer);
                 Document document = new Document(pdf);
 
-                // Load the font using AssetManager
-                AssetManager assetManager = context.getAssets();
+                AssetManager assetManager = activity.getAssets();
                 PdfFont hebrewFont;
 
                 try (InputStream fontStream = assetManager.open("fonts/DGL_Hollywood.ttf")) {
@@ -89,29 +89,33 @@ public class PDFExporter {
                 for (ViewBook.Page page : pages) {
                     Log.d("PDFExporter", "Processing page " + page.getPageNumber());
 
-                    // Create a new paragraph with RTL direction
                     Paragraph paragraph = new Paragraph()
                             .setFont(hebrewFont)
                             .setFontSize(12)
-                            .setTextAlignment(TextAlignment.RIGHT)
-                            .setBaseDirection(BaseDirection.RIGHT_TO_LEFT);
-// Add each character in reverse order
-                    String pageText = page.getText();
-                    for (int i = pageText.length() - 1; i >= 0; i--) {
-                        paragraph.add(String.valueOf(pageText.charAt(i)));
-                    }
+                            .setTextAlignment(TextAlignment.RIGHT); // יישור לימין
 
+                    String pageText = page.getText();
+                    String[] words = pageText.split(" ");
+
+                    // הפיכת סדר המילים
+                    for (int i = words.length - 1; i >= 0; i--) {
+                        // הפיכת כל מילה בנפרד
+                        String reversedWord = new StringBuilder(words[i]).reverse().toString();
+                        paragraph.add(reversedWord).add(" "); // הוספת המילה ההפוכה עם רווח
+                    }
                     document.add(paragraph);
                     document.add(new Paragraph(" ")); // Space between text and image
+
 
                     if (page.getUrl() != null && !page.getUrl().isEmpty()) {
                         try {
                             String cleanUrl = page.getUrl().replace("\"", "");
                             Log.d("PDFExporter", "Fetching image from URL: " + cleanUrl);
+
                             CountDownLatch latch = new CountDownLatch(1);
                             final Bitmap[] bitmapHolder = new Bitmap[1];
 
-                            Glide.with(context)
+                            Glide.with(activity)
                                     .asBitmap()
                                     .load(cleanUrl)
                                     .into(new CustomTarget<Bitmap>() {
@@ -139,9 +143,7 @@ public class PDFExporter {
 
                                 document.add(image);
                             }
-                        }
-
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             Log.e("PDFExporter", "Error processing image: " + e.getMessage());
                         }
                     }
@@ -156,14 +158,14 @@ public class PDFExporter {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     ContentValues values = new ContentValues();
-                    values.put(MediaStore.MediaColumns.DISPLAY_NAME, bookName + ".pdf");
+                    values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
                     values.put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf");
                     values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
 
-                    Uri uri = context.getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+                    Uri uri = activity.getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
 
                     if (uri != null) {
-                        try (OutputStream os = context.getContentResolver().openOutputStream(uri);
+                        try (OutputStream os = activity.getContentResolver().openOutputStream(uri);
                              FileInputStream fis = new FileInputStream(pdfFile)) {
                             byte[] buffer = new byte[1024];
                             int length;
@@ -176,11 +178,15 @@ public class PDFExporter {
                     Log.d("PDFExporter", "PDF saved to Downloads folder");
                 }
 
-                Toast.makeText(context, "PDF exported successfully", Toast.LENGTH_LONG).show();
+                activity.runOnUiThread(() -> {
+                    Toast.makeText(activity, "PDF exported successfully", Toast.LENGTH_LONG).show();
+                });
 
             } catch (Exception e) {
                 Log.e("PDFExporter", "Error exporting PDF: " + e.getMessage(), e);
-                Toast.makeText(context, "Failed to export PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                activity.runOnUiThread(() -> {
+                    Toast.makeText(activity, "Failed to export PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
             }
         });
     }
