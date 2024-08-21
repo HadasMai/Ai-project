@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -35,7 +37,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
+import androidx.appcompat.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.PopupMenu;
+import android.view.Gravity;
 public class ViewBook extends AppCompatActivity {
 
     private TextView textView;
@@ -56,6 +62,7 @@ public class ViewBook extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         setContentView(R.layout.activity_view_book);
 
         textView = findViewById(R.id.textStory);
@@ -63,6 +70,15 @@ public class ViewBook extends AppCompatActivity {
         buttonNextPage = findViewById(R.id.buttonNextPage);
         imageView = findViewById(R.id.imageStory);
         exportPdfButton = findViewById(R.id.exportPdfButton);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
+            getSupportActionBar().setDisplayShowTitleEnabled(false); // מסתיר את הכותרת
+        }
 
         bookId = getIntent().getStringExtra("bookId");
 
@@ -110,6 +126,58 @@ public class ViewBook extends AppCompatActivity {
                 requestStoragePermission();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.view_book_menu, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            menu.getItem(i).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            View menuItemView = findViewById(R.id.toolbar); // או R.id.action_bar אם אתה משתמש ב-ActionBar
+            if (menuItemView == null) {
+                menuItemView = findViewById(android.R.id.home);
+            }
+
+            if (menuItemView != null) {
+                PopupMenu popup = new PopupMenu(this, menuItemView, Gravity.END);
+                popup.getMenuInflater().inflate(R.menu.view_book_menu, popup.getMenu());
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        int itemId = menuItem.getItemId();
+                        if (itemId == R.id.action_home) {
+                            Intent homeIntent = new Intent(ViewBook.this, UserAccount.class);
+                            startActivity(homeIntent);
+                            finish();
+                            return true;
+                        } else if (itemId == R.id.action_download) {
+                            exportBookToPDF();
+                            return true;
+                        } else if (itemId == R.id.action_edit) {
+                            Intent editIntent = new Intent(ViewBook.this, NewPage.class);
+                            editIntent.putExtra("bookId", bookId);
+                            startActivity(editIntent);
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+
+                popup.show();
+            } else {
+                Toast.makeText(this, "לא ניתן למצוא עוגן לתפריט", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void fetchPagesFromFirebase() {
@@ -173,14 +241,12 @@ public class ViewBook extends AppCompatActivity {
 
     private void requestStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // For Android 13 and above
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, STORAGE_PERMISSION_CODE);
             } else {
                 exportBookToPDF();
             }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // For Android 11 and 12
             if (Environment.isExternalStorageManager()) {
                 exportBookToPDF();
             } else {
@@ -190,7 +256,6 @@ public class ViewBook extends AppCompatActivity {
                 startActivityForResult(intent, STORAGE_PERMISSION_CODE);
             }
         } else {
-            // For Android 10 and below
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
             } else {
@@ -233,7 +298,6 @@ public class ViewBook extends AppCompatActivity {
                 String uid = dataSnapshot.child("uid").getValue(String.class);
 
                 if (bookName != null && uid != null) {
-                    // Now fetch the user's name using the uid
                     usersRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot userSnapshot) {
@@ -269,22 +333,18 @@ public class ViewBook extends AppCompatActivity {
         });
     }
 
-
-    // Inner class to represent a page
     public static class Page {
         private String bookId;
         private long pageNumber;
         private String text;
         private String url;
-        private String style;  // הוספנו שדה זה
-        private String pageId; // הוספנו שדה זה
+        private String style;
+        private String pageId;
 
-        // Constructor
         public Page() {
             // Default constructor required for calls to DataSnapshot.getValue(Page.class)
         }
 
-        // Getters and setters for all fields
         public String getBookId() { return bookId; }
         public void setBookId(String bookId) { this.bookId = bookId; }
 

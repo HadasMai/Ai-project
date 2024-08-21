@@ -26,6 +26,7 @@
             android:theme="@style/Theme.MyStoryApp"
             android:enableOnBackInvokedCallback="true" tools:targetApi="tiramisu">
 
+
         <activity
                 android:name=".MainActivity"
                 android:exported="true">

@@ -26,8 +26,13 @@
 <!--        <item name="android:windowTranslucentStatus">true</item>-->
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:enforceStatusBarContrast" >false</item>
-
+        <item name="android:actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
     </style>
 
     <style name="Theme.MyStoryApp" parent="Base.Theme.MyStoryApp"/>
+
+    <style name="ActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
+        <item name="android:src">@null</item>
+    </style>
+
 </resources>
