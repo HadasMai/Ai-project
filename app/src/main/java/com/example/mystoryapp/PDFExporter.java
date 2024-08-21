@@ -44,9 +44,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.itextpdf.io.util.StreamUtil;
+
 public class PDFExporter {
 
-    public static void exportBookToPDF(Activity activity, List<ViewBook.Page> pages, String bookName) {
+    public static void exportBookToPDF(Activity activity, List<ViewBook.Page> pages, String bookName, String authorName) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         executor.execute(() -> {
@@ -86,90 +87,13 @@ public class PDFExporter {
                     hebrewFont = PdfFontFactory.createFont(fontBytes, PdfEncodings.IDENTITY_H);
                 }
 
+                // Add cover page
+                addCoverPage(document, hebrewFont, bookName, authorName);
+
+                // Add content pages
+                int totalPages = pages.size();
                 for (ViewBook.Page page : pages) {
-                    Log.d("PDFExporter", "Processing page " + page.getPageNumber());
-
-                    String pageText = page.getText();
-
-                    // יצירת פסקה חדשה
-                    Paragraph paragraph = new Paragraph()
-                            .setFont(hebrewFont)
-                            .setFontSize(16)
-                            .setTextAlignment(TextAlignment.RIGHT)      //יישור לימין
-                            .setBaseDirection(BaseDirection.RIGHT_TO_LEFT); // כיוון מימין לשמאל
-
-                    // חילוק הטקסט לשורות (במידת הצורך)
-                    String[] lines = pageText.split("\n"); // אם אין שורות, השאר את זה כפי שהוא
-
-                    // מעבר על כל שורה בנפרד
-                    for (String line : lines) {
-                        String[] words = line.split(" ");  // חילוק השורה למילים
-                          // לא הפיכת סדר השורות  והפיכת סדר המילים
-                         for (int i = words.length - 1; i >= 0; i--) {
-                        // הפיכת כל מילה בנפרד
-                        String reversedWord = new StringBuilder(words[i]).reverse().toString();
-                        paragraph.add(reversedWord).add(" "); // הוספת המילה ההפוכה עם רווח
-
-                        }
-
-                        // הוספת הפסקה למסמך
-                        document.add(paragraph);
-
-                        // יצירת פסקה חדשה עבור השורה הבאה
-                        paragraph = new Paragraph()
-                                .setFont(hebrewFont)
-                                .setFontSize(16)
-                                .setTextAlignment(TextAlignment.RIGHT)      // יישור לימין
-                                .setBaseDirection(BaseDirection.RIGHT_TO_LEFT); // כיוון מימין לשמאל
-                    }
-
-                    // הוספת רווח בין הטקסט לתמונה
-                    document.add(new Paragraph(" "));
-
-                    if (page.getUrl() != null && !page.getUrl().isEmpty()) {
-                        try {
-                            String cleanUrl = page.getUrl().replace("\"", "");
-                            Log.d("PDFExporter", "Fetching image from URL: " + cleanUrl);
-
-                            CountDownLatch latch = new CountDownLatch(1);
-                            final Bitmap[] bitmapHolder = new Bitmap[1];
-
-                            Glide.with(activity)
-                                    .asBitmap()
-                                    .load(cleanUrl)
-                                    .into(new CustomTarget<Bitmap>() {
-                                        @Override
-                                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                            bitmapHolder[0] = resource;
-                                            latch.countDown();
-                                        }
-
-                                        @Override
-                                        public void onLoadCleared(@Nullable Drawable placeholder) {
-                                            latch.countDown();
-                                        }
-                                    });
-
-                            latch.await();
-
-                            if (bitmapHolder[0] != null) {
-                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                                bitmapHolder[0].compress(Bitmap.CompressFormat.PNG, 100, stream);
-                                Image image = new Image(ImageDataFactory.create(stream.toByteArray()));
-
-                                float pageWidth = pdf.getDefaultPageSize().getWidth() - document.getLeftMargin() - document.getRightMargin();
-                                image.setWidth(pageWidth);
-
-                                document.add(image);
-                            }
-                        } catch (Exception e) {
-                            Log.e("PDFExporter", "Error processing image: " + e.getMessage());
-                        }
-                    }
-
-                    if (pages.indexOf(page) < pages.size() - 1) {
-                        document.add(new AreaBreak());
-                    }
+                    addContentPage(document, pdf, hebrewFont, page, activity, totalPages);
                 }
 
                 document.close();
@@ -209,4 +133,100 @@ public class PDFExporter {
             }
         });
     }
+
+    private static void addCoverPage(Document document, PdfFont hebrewFont, String bookName, String authorName) throws Exception {
+        Paragraph titleParagraph = new Paragraph(new StringBuilder(bookName).reverse().toString())
+                .setFont(hebrewFont)
+                .setFontSize(24)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setBaseDirection(BaseDirection.RIGHT_TO_LEFT);
+        document.add(titleParagraph);
+
+        document.add(new Paragraph("\n"));
+
+        Paragraph authorParagraph = new Paragraph(new StringBuilder("מאת: " + authorName).reverse().toString())
+                .setFont(hebrewFont)
+                .setFontSize(18)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setBaseDirection(BaseDirection.RIGHT_TO_LEFT);
+        document.add(authorParagraph);
+
+        document.add(new AreaBreak());
+    }
+
+    private static void addContentPage(Document document, PdfDocument pdf, PdfFont hebrewFont, ViewBook.Page page, Activity activity, int totalPages) throws Exception {
+        Log.d("PDFExporter", "Processing page " + page.getPageNumber());
+
+        String pageText = page.getText();
+
+        Paragraph paragraph = new Paragraph()
+                .setFont(hebrewFont)
+                .setFontSize(16)
+                .setTextAlignment(TextAlignment.RIGHT)
+                .setBaseDirection(BaseDirection.RIGHT_TO_LEFT);
+
+        String[] lines = pageText.split("\n");
+
+        for (String line : lines) {
+            String[] words = line.split(" ");
+            for (int i = words.length - 1; i >= 0; i--) {
+                String reversedWord = new StringBuilder(words[i]).reverse().toString();
+                paragraph.add(reversedWord).add(" ");
+            }
+            document.add(paragraph);
+            paragraph = new Paragraph()
+                    .setFont(hebrewFont)
+                    .setFontSize(16)
+                    .setTextAlignment(TextAlignment.RIGHT)
+                    .setBaseDirection(BaseDirection.RIGHT_TO_LEFT);
+        }
+
+        document.add(new Paragraph(" "));
+
+        if (page.getUrl() != null && !page.getUrl().isEmpty()) {
+            try {
+                String cleanUrl = page.getUrl().replace("\"", "");
+                Log.d("PDFExporter", "Fetching image from URL: " + cleanUrl);
+
+                CountDownLatch latch = new CountDownLatch(1);
+                final Bitmap[] bitmapHolder = new Bitmap[1];
+
+                Glide.with(activity)
+                        .asBitmap()
+                        .load(cleanUrl)
+                        .into(new CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                bitmapHolder[0] = resource;
+                                latch.countDown();
+                            }
+
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                                latch.countDown();
+                            }
+                        });
+
+                latch.await();
+
+                if (bitmapHolder[0] != null) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmapHolder[0].compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    Image image = new Image(ImageDataFactory.create(stream.toByteArray()));
+
+                    float pageWidth = pdf.getDefaultPageSize().getWidth() - document.getLeftMargin() - document.getRightMargin();
+                    image.setWidth(pageWidth);
+
+                    document.add(image);
+                }
+            } catch (Exception e) {
+                Log.e("PDFExporter", "Error processing image: " + e.getMessage());
+            }
+        }
+
+        if (page.getPageNumber() < totalPages) {
+            document.add(new AreaBreak());
+        }
+    }
 }
+

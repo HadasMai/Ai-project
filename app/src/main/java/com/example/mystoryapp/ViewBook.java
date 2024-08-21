@@ -49,6 +49,7 @@ public class ViewBook extends AppCompatActivity {
     private String bookId;
     private List<Page> pages;
     private int currentPageIndex;
+    private DatabaseReference usersRef;
 
     private static final int STORAGE_PERMISSION_CODE = 1;
 
@@ -75,6 +76,8 @@ public class ViewBook extends AppCompatActivity {
                 .getReference("pages");
         booksRef = FirebaseDatabase.getInstance("https://mystory-2784d-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference("Books");
+        usersRef = FirebaseDatabase.getInstance("https://mystory-2784d-default-rtdb.asia-southeast1.firebasedatabase.app")
+                .getReference("Users");
 
         pages = new ArrayList<>();
         currentPageIndex = 0;
@@ -227,25 +230,45 @@ public class ViewBook extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String bookName = dataSnapshot.child("bookName").getValue(String.class);
-                if (bookName != null) {
-                    try {
-                        PDFExporter.exportBookToPDF(ViewBook.this, pages, bookName);
-                        Toast.makeText(ViewBook.this, "PDF exported to Downloads folder", Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Log.e("ViewBook", "Error exporting PDF: " + e.getMessage(), e);
-                        Toast.makeText(ViewBook.this, "Failed to export PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
+                String uid = dataSnapshot.child("uid").getValue(String.class);
+
+                if (bookName != null && uid != null) {
+                    // Now fetch the user's name using the uid
+                    usersRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot userSnapshot) {
+                            String userName = userSnapshot.child("name").getValue(String.class);
+
+                            if (userName != null) {
+                                try {
+                                    PDFExporter.exportBookToPDF(ViewBook.this, pages, bookName, userName);
+                                    Toast.makeText(ViewBook.this, "PDF exported to Downloads folder", Toast.LENGTH_LONG).show();
+                                } catch (Exception e) {
+                                    Log.e("ViewBook", "Error exporting PDF: " + e.getMessage(), e);
+                                    Toast.makeText(ViewBook.this, "Failed to export PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Toast.makeText(ViewBook.this, "Failed to fetch user name", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Toast.makeText(ViewBook.this, "Failed to fetch user details: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
-                    Toast.makeText(ViewBook.this, "Failed to fetch book name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ViewBook.this, "Failed to fetch book details", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(ViewBook.this, "Failed to fetch book name: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewBook.this, "Failed to fetch book details: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     // Inner class to represent a page
     public static class Page {
