@@ -1,10 +1,8 @@
 package com.example.mystoryapp;
 
-import android.graphics.drawable.Drawable;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,10 +11,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -31,14 +41,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 public class NewPage extends AppCompatActivity {
 
     private EditText editTextText2;
@@ -49,7 +51,6 @@ public class NewPage extends AppCompatActivity {
     private Button buttonFinish;
     private ImageView imageView;
     private OkHttpClient client;
-    private ProgressDialog progressDialog;
     private static final String TAG = "NewPage";
 
     private DatabaseReference booksRef;
@@ -59,6 +60,8 @@ public class NewPage extends AppCompatActivity {
     private String lastGeneratedUrl;
     private long currentPageNumber;
     private String pageId;
+    private boolean isEditing;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +74,7 @@ public class NewPage extends AppCompatActivity {
         buttonPrevPage = findViewById(R.id.buttonPrevPage);
         buttonNextPage = findViewById(R.id.buttonNextPage);
         imageView = findViewById(R.id.imageView);
-        buttonFinish=findViewById(R.id.EndButton);
+        buttonFinish = findViewById(R.id.EndButton);
 
         client = new OkHttpClient.Builder()
                 .connectTimeout(0, TimeUnit.SECONDS)
@@ -84,19 +87,27 @@ public class NewPage extends AppCompatActivity {
         progressDialog.setCancelable(false);
 
         bookId = getIntent().getStringExtra("bookId");
+        isEditing = getIntent().getBooleanExtra("isEditing", false);
+        currentPageNumber = getIntent().getLongExtra("pageNumber", 1);
 
         if (bookId == null) {
             Toast.makeText(NewPage.this, "bookId לא התקבל", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
+
         booksRef = FirebaseDatabase.getInstance("https://mystory-2784d-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference("Books");
         pagesRef = FirebaseDatabase.getInstance("https://mystory-2784d-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference("pages");
 
         fetchDataFromFirebase();
-        createNewPageInFirebase();
+
+        if (isEditing) {
+            loadExistingPage(currentPageNumber);
+        } else {
+            createNewPageInFirebase();
+        }
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +122,8 @@ public class NewPage extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(NewPage.this, NewPage.class);
                 intent.putExtra("bookId", bookId);
+                intent.putExtra("isEditing", isEditing);
+                intent.putExtra("pageNumber", currentPageNumber);
                 startActivity(intent);
                 finish();
             }
@@ -129,7 +142,7 @@ public class NewPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (currentPageNumber > 1) {
-                    loadPage(currentPageNumber - 1);
+                    loadExistingPage(currentPageNumber - 1);
                 }
             }
         });
@@ -137,9 +150,36 @@ public class NewPage extends AppCompatActivity {
         buttonNextPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadPage(currentPageNumber + 1);
+                loadExistingPage(currentPageNumber + 1);
             }
         });
+//        buttonPrevPage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (currentPageNumber > 1) {
+//                    if (isEditing) {
+//                        loadExistingPage(currentPageNumber - 1);
+//                    } else {
+//                        // Existing logic for previous page in creation mode
+//                        // You might want to save current page before moving
+//                        updatePageInFirebase(editTextText2.getText().toString(), lastGeneratedUrl);
+//                        currentPageNumber--;
+//                        loadExistingPage(currentPageNumber);
+//                    }
+//                }
+//            }
+//        });
+//
+//        buttonNextPage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (isEditing) {
+//                    // Save current page before moving to next
+//                    updatePageInFirebase(editTextText2.getText().toString(), lastGeneratedUrl);
+//                    loadExistingPage(currentPageNumber + 1);
+//                }
+//            }
+//        });
     }
 
     private void fetchDataFromFirebase() {
@@ -191,12 +231,49 @@ public class NewPage extends AppCompatActivity {
         });
     }
 
+    private void loadExistingPage(long pageNumber) {
+        pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@Nullable DataSnapshot snapshot) {
+                boolean pageFound = false;
+                for (DataSnapshot pageSnapshot : snapshot.getChildren()) {
+                    Long pgNumber = pageSnapshot.child("pageNumber").getValue(Long.class);
+                    if (pgNumber != null && pgNumber == pageNumber) {
+                        pageId = pageSnapshot.getKey();
+                        String text = pageSnapshot.child("text").getValue(String.class);
+                        String url = pageSnapshot.child("url").getValue(String.class);
+
+                        editTextText2.setText(text);
+                        if (url != null && !url.isEmpty()) {
+                            loadImage(url);
+                            lastGeneratedUrl = url;
+                        }
+
+                        currentPageNumber = pageNumber;
+                        updateNavigationButtons();
+                        pageFound = true;
+                        break;
+                    }
+                }
+                if (!pageFound) {
+                    Toast.makeText(NewPage.this, "Page not found. Creating a new page.", Toast.LENGTH_SHORT).show();
+                    createNewPageInFirebase();
+                }
+            }
+
+            @Override
+            public void onCancelled(@Nullable DatabaseError error) {
+                Toast.makeText(NewPage.this, "Failed to load page", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void createNewPageInFirebase() {
         pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@Nullable DataSnapshot snapshot) {
                 long pageCount = snapshot.getChildrenCount();
-                pageId = pagesRef.push().getKey(); // Generate a unique page ID
+                pageId = pagesRef.push().getKey();
 
                 if (pageId != null) {
                     HashMap<String, Object> pageData = new HashMap<>();
@@ -245,12 +322,9 @@ public class NewPage extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e(TAG, "Request failed", e);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressDialog.dismiss();
-                        Toast.makeText(NewPage.this, "Request Failed", Toast.LENGTH_SHORT).show();
-                    }
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(NewPage.this, "Request Failed", Toast.LENGTH_SHORT).show();
                 });
             }
 
@@ -258,27 +332,18 @@ public class NewPage extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     final String responseData = response.body().string();
-                    lastGeneratedUrl = responseData; // Save the last generated URL
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressDialog.dismiss();
-                            Toast.makeText(NewPage.this, responseData, Toast.LENGTH_SHORT).show();
-
-                            Log.d(TAG, "Server response: " + responseData);
-                            loadImage(responseData);
-
-                            // Update the existing page in Firebase
-                            updatePageInFirebase(editTextText2.getText().toString(), lastGeneratedUrl);
-                        }
+                    lastGeneratedUrl = responseData;
+                    runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(NewPage.this, responseData, Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Server response: " + responseData);
+                        loadImage(responseData);
+                        updatePageInFirebase(editTextText2.getText().toString(), lastGeneratedUrl);
                     });
                 } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressDialog.dismiss();
-                            Toast.makeText(NewPage.this, "Response not successful", Toast.LENGTH_SHORT).show();
-                        }
+                    runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(NewPage.this, "Response not successful", Toast.LENGTH_SHORT).show();
                     });
                 }
             }
@@ -330,62 +395,6 @@ public class NewPage extends AppCompatActivity {
             Toast.makeText(NewPage.this, "Page ID is null", Toast.LENGTH_SHORT).show();
         }
     }
-
-    private void loadPage(long pageNumber) {
-        // בדוק ועדכן את הטקסט של העמוד הנוכחי לפני שעוברים לעמוד חדש
-        updateCurrentPageText();
-        pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@Nullable DataSnapshot snapshot) {
-                for (DataSnapshot pageSnapshot : snapshot.getChildren()) {
-                    Long pgNumber = pageSnapshot.child("pageNumber").getValue(Long.class);
-                    if (pgNumber != null && pgNumber == pageNumber) {
-                        pageId = pageSnapshot.getKey();
-                        String text = pageSnapshot.child("text").getValue(String.class);
-                        String url = pageSnapshot.child("url").getValue(String.class);
-
-                        editTextText2.setText(text);
-                        if (url != null && !url.isEmpty()) {
-                            loadImage(url);
-                        }
-
-                        currentPageNumber = pageNumber;
-                        updateNavigationButtons();
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@Nullable DatabaseError error) {
-                Toast.makeText(NewPage.this, "Failed to load page", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void updateCurrentPageText() {
-        if (pageId != null) {
-            String currentText = editTextText2.getText().toString();
-            pagesRef.child(pageId).child("text").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@Nullable DataSnapshot snapshot) {
-                    String dbText = snapshot.getValue(String.class);
-                    if (dbText != null && !dbText.equals(currentText)) {
-                        // עדכן את הטקסט ב-Firebase אם הוא שונה ממה שיש ב-EditText
-                        pagesRef.child(pageId).child("text").setValue(currentText)
-                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Text updated in Firebase"))
-                                .addOnFailureListener(e -> Log.e(TAG, "Failed to update text in Firebase", e));
-                    }
-                }
-
-                @Override
-                public void onCancelled(@Nullable DatabaseError error) {
-                    Log.e(TAG, "Failed to read text from Firebase", error.toException());
-                }
-            });
-        }
-    }
-
     private void updateNavigationButtons() {
         buttonPrevPage.setVisibility(currentPageNumber > 1 ? View.VISIBLE : View.GONE);
         pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -401,4 +410,21 @@ public class NewPage extends AppCompatActivity {
             }
         });
     }
+//    private void updateNavigationButtons() {
+//        buttonPrevPage.setVisibility(currentPageNumber > 1 ? View.VISIBLE : View.GONE);
+//        pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@Nullable DataSnapshot snapshot) {
+//                long totalPages = snapshot.getChildrenCount();
+//            //    buttonNextPage.setVisibility(currentPageNumber < totalPages || !isEditing ? View.VISIBLE : View.GONE);
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@Nullable DatabaseError error) {
+//                Toast.makeText(NewPage.this, "Failed to update navigation buttons", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 }
+

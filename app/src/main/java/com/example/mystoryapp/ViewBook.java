@@ -164,6 +164,8 @@ public class ViewBook extends AppCompatActivity {
                         } else if (itemId == R.id.action_edit) {
                             Intent editIntent = new Intent(ViewBook.this, NewPage.class);
                             editIntent.putExtra("bookId", bookId);
+                            editIntent.putExtra("pageNumber", currentPageIndex + 1); // כי האינדקס מתחיל מ-0
+                            editIntent.putExtra("isEditing", true);
                             startActivity(editIntent);
                             return true;
                         }
