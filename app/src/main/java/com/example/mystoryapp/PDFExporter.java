@@ -89,23 +89,42 @@ public class PDFExporter {
                 for (ViewBook.Page page : pages) {
                     Log.d("PDFExporter", "Processing page " + page.getPageNumber());
 
+                    String pageText = page.getText();
+
+                    // יצירת פסקה חדשה
                     Paragraph paragraph = new Paragraph()
                             .setFont(hebrewFont)
-                            .setFontSize(12)
-                            .setTextAlignment(TextAlignment.RIGHT); // יישור לימין
+                            .setFontSize(16)
+                            .setTextAlignment(TextAlignment.RIGHT)      //יישור לימין
+                            .setBaseDirection(BaseDirection.RIGHT_TO_LEFT); // כיוון מימין לשמאל
 
-                    String pageText = page.getText();
-                    String[] words = pageText.split(" ");
+                    // חילוק הטקסט לשורות (במידת הצורך)
+                    String[] lines = pageText.split("\n"); // אם אין שורות, השאר את זה כפי שהוא
 
-                    // הפיכת סדר המילים
-                    for (int i = words.length - 1; i >= 0; i--) {
+                    // מעבר על כל שורה בנפרד
+                    for (String line : lines) {
+                        String[] words = line.split(" ");  // חילוק השורה למילים
+                          // לא הפיכת סדר השורות  והפיכת סדר המילים
+                         for (int i = words.length - 1; i >= 0; i--) {
                         // הפיכת כל מילה בנפרד
                         String reversedWord = new StringBuilder(words[i]).reverse().toString();
                         paragraph.add(reversedWord).add(" "); // הוספת המילה ההפוכה עם רווח
-                    }
-                    document.add(paragraph);
-                    document.add(new Paragraph(" ")); // Space between text and image
 
+                        }
+
+                        // הוספת הפסקה למסמך
+                        document.add(paragraph);
+
+                        // יצירת פסקה חדשה עבור השורה הבאה
+                        paragraph = new Paragraph()
+                                .setFont(hebrewFont)
+                                .setFontSize(16)
+                                .setTextAlignment(TextAlignment.RIGHT)      // יישור לימין
+                                .setBaseDirection(BaseDirection.RIGHT_TO_LEFT); // כיוון מימין לשמאל
+                    }
+
+                    // הוספת רווח בין הטקסט לתמונה
+                    document.add(new Paragraph(" "));
 
                     if (page.getUrl() != null && !page.getUrl().isEmpty()) {
                         try {

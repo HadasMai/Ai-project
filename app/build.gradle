@@ -41,6 +41,7 @@ android {
     }
 }
 
+
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.2.2')  // עדכנו לגרסה האחרונה
     implementation 'com.google.firebase:firebase-analytics'
@@ -62,5 +63,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     implementation 'org.slf4j:slf4j-android:1.7.32'
+
+    implementation 'com.itextpdf:itext7-core:7.2.3' //
+
+
 
 }
