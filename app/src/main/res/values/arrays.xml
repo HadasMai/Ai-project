@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="style_array">
+        <item>אנימציה</item>
+        <item>3D תלת מימד</item>
+        <item>ריאליסטי - Photographic </item>
+        <item>מצויר</item>
+        <item>שחור לבן</item>
+        <item>מנגה</item>
+    </string-array>
+</resources>

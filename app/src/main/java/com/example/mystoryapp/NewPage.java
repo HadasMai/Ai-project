@@ -6,10 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.*;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,7 +59,8 @@ public class NewPage extends AppCompatActivity {
     private String pageId;
     private boolean isEditing;
     private ProgressDialog progressDialog;
-
+    private Spinner styleSpinner;
+    private String selectedStyle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +73,7 @@ public class NewPage extends AppCompatActivity {
         buttonNextPage = findViewById(R.id.buttonNextPage);
         imageView = findViewById(R.id.imageView);
         buttonFinish = findViewById(R.id.EndButton);
+        styleSpinner = findViewById(R.id.styleSpinner);
 
         client = new OkHttpClient.Builder()
                 .connectTimeout(0, TimeUnit.SECONDS)
@@ -101,11 +100,32 @@ public class NewPage extends AppCompatActivity {
         pagesRef = FirebaseDatabase.getInstance("https://mystory-2784d-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference("pages");
 
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.style_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        styleSpinner.setAdapter(adapter);
+
+        styleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedStyle = parent.getItemAtPosition(position).toString();
+                updatePageInFirebase(editTextText2.getText().toString(), lastGeneratedUrl);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
+
         fetchDataFromFirebase();
 
         if (isEditing) {
             loadExistingPage(currentPageNumber);
-            isEditing=false;
+            isEditing = false;
         } else {
             createNewPageInFirebase();
         }
@@ -114,7 +134,7 @@ public class NewPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String text = editTextText2.getText().toString();
-                sendTextToServer(descriptionOfTheHeroOfStory + text);
+                sendTextToServer(descriptionOfTheHeroOfStory + text +"תמונה בסגנון: " + selectedStyle );
             }
         });
 
@@ -157,7 +177,6 @@ public class NewPage extends AppCompatActivity {
                 loadExistingPage(currentPageNumber + 1);
             }
         });
-
     }
 
     private void fetchDataFromFirebase() {
@@ -220,7 +239,11 @@ public class NewPage extends AppCompatActivity {
                         pageId = pageSnapshot.getKey();
                         String text = pageSnapshot.child("text").getValue(String.class);
                         String url = pageSnapshot.child("url").getValue(String.class);
-
+                        String style = pageSnapshot.child("style").getValue(String.class);
+                        if (style != null && !style.isEmpty()) {
+                            int spinnerPosition = ((ArrayAdapter) styleSpinner.getAdapter()).getPosition(style);
+                            styleSpinner.setSelection(spinnerPosition);
+                        }
                         editTextText2.setText(text);
                         if (url != null && !url.isEmpty()) {
                             loadImage(url);
@@ -367,7 +390,7 @@ public class NewPage extends AppCompatActivity {
             HashMap<String, Object> pageData = new HashMap<>();
             pageData.put("text", text);
             pageData.put("url", url);
-            pageData.put("style", "");
+            pageData.put("style", selectedStyle);
 
             pagesRef.child(pageId).updateChildren(pageData)
                     .addOnSuccessListener(aVoid -> Toast.makeText(NewPage.this, "Page updated successfully", Toast.LENGTH_SHORT).show())

@@ -42,9 +42,6 @@
             tools:ignore="MissingConstraints" app:layout_constraintTop_toBottomOf="@+id/imageView"
             app:layout_constraintBottom_toTopOf="@+id/buttonNextPage"/>
 
-    <!-- כפתור חץ שמאלי -->
-
-    <!-- כפתור חץ ימני -->
     <ImageView
             android:id="@+id/imageView"
             android:layout_width="326dp"
@@ -96,5 +93,13 @@
             app:layout_constraintEnd_toStartOf="@+id/buttonNextPage"
             app:layout_constraintStart_toEndOf="@+id/buttonPrevPage" app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintVertical_bias="0.275"/>
+    <Spinner
+            android:id="@+id/styleSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/editTextText2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
