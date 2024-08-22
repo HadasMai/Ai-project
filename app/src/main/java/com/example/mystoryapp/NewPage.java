@@ -132,6 +132,7 @@ public class NewPage extends AppCompatActivity {
         buttonFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                updatePageInFirebase(editTextText2.getText().toString(), lastGeneratedUrl);
                 Intent intent = new Intent(NewPage.this, BookCoverActivity.class);
                 intent.putExtra("bookId", bookId);
                 startActivity(intent);
@@ -142,6 +143,7 @@ public class NewPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (currentPageNumber > 1) {
+                    updatePageInFirebase(editTextText2.getText().toString(), lastGeneratedUrl);
                     loadExistingPage(currentPageNumber - 1);
                 }
             }
@@ -150,36 +152,11 @@ public class NewPage extends AppCompatActivity {
         buttonNextPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                updatePageInFirebase(editTextText2.getText().toString(), lastGeneratedUrl);
                 loadExistingPage(currentPageNumber + 1);
             }
         });
-//        buttonPrevPage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (currentPageNumber > 1) {
-//                    if (isEditing) {
-//                        loadExistingPage(currentPageNumber - 1);
-//                    } else {
-//                        // Existing logic for previous page in creation mode
-//                        // You might want to save current page before moving
-//                        updatePageInFirebase(editTextText2.getText().toString(), lastGeneratedUrl);
-//                        currentPageNumber--;
-//                        loadExistingPage(currentPageNumber);
-//                    }
-//                }
-//            }
-//        });
-//
-//        buttonNextPage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (isEditing) {
-//                    // Save current page before moving to next
-//                    updatePageInFirebase(editTextText2.getText().toString(), lastGeneratedUrl);
-//                    loadExistingPage(currentPageNumber + 1);
-//                }
-//            }
-//        });
+
     }
 
     private void fetchDataFromFirebase() {
