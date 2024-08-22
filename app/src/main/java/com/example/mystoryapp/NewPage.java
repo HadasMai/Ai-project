@@ -105,6 +105,7 @@ public class NewPage extends AppCompatActivity {
 
         if (isEditing) {
             loadExistingPage(currentPageNumber);
+            isEditing=false;
         } else {
             createNewPageInFirebase();
         }
@@ -224,6 +225,9 @@ public class NewPage extends AppCompatActivity {
                         if (url != null && !url.isEmpty()) {
                             loadImage(url);
                             lastGeneratedUrl = url;
+                        }
+                        else {
+                            lastGeneratedUrl = "";
                         }
 
                         currentPageNumber = pageNumber;
@@ -379,6 +383,7 @@ public class NewPage extends AppCompatActivity {
             public void onDataChange(@Nullable DataSnapshot snapshot) {
                 long totalPages = snapshot.getChildrenCount();
                 buttonNextPage.setVisibility(currentPageNumber < totalPages ? View.VISIBLE : View.GONE);
+                reloadButton.setVisibility(currentPageNumber == totalPages ? View.VISIBLE : View.GONE);
             }
 
             @Override

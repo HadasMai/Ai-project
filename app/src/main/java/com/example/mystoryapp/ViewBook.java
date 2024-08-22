@@ -366,3 +366,4 @@ public class ViewBook extends AppCompatActivity {
         public void setPageId(String pageId) { this.pageId = pageId; }
     }
 }
+
