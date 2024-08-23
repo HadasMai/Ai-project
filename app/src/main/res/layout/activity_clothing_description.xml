@@ -2,10 +2,38 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/watercolor_orange"
         android:padding="16dp">
+    <!-- כותרת ראשית -->
+
+    <TextView
+            android:id="@+id/heroDescriptionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="המשך תיאור הגיבור שלך:"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="52dp"
+            android:gravity="center"/>
+    <!-- כותרת דת -->
+    <TextView
+            android:id="@+id/religionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="דת:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="120dp"
+            android:layout_marginStart="16dp" />
 
     <EditText
             android:id="@+id/religionEt"
@@ -13,10 +41,24 @@
             android:layout_height="44dp"
             android:hint="דת"
             android:importantForAccessibility="yes"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/religionLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="128dp" app:layout_constraintHorizontal_bias="0.562"/>
+            android:layout_marginTop="8dp" />
+
+    <!-- כותרת תיאור לבוש -->
+    <TextView
+            android:id="@+id/clothingDescriptionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="תיאור הלבוש של גיבור הסיפור:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            app:layout_constraintTop_toBottomOf="@id/religionEt"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="28dp"
+            android:layout_marginStart="16dp" />
+
     <EditText
             android:id="@+id/clothingDescriptionEt"
             android:layout_width="351dp"
@@ -26,9 +68,12 @@
             android:inputType="textMultiLine"
             android:minLines="10"
             android:importantForAccessibility="yes"
+            app:layout_constraintTop_toBottomOf="@id/clothingDescriptionLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/religionEt" android:layout_marginTop="36dp"/>
+            android:layout_marginTop="8dp" />
+
+    <!-- כפתור -->
     <Button
             android:id="@+id/submitBtn"
             android:layout_width="186dp"
@@ -38,8 +83,8 @@
             android:importantForAccessibility="yes"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.569"
-            android:layout_marginBottom="232dp" app:layout_constraintTop_toBottomOf="@+id/clothingDescriptionEt"
-            app:layout_constraintVertical_bias="0.396"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="232dp"
+            app:layout_constraintTop_toBottomOf="@id/clothingDescriptionEt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

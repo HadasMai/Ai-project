@@ -1,0 +1,4 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    <solid android:color="@android:color/transparent"/> &lt;!&ndash; צבע רקע (אופציונלי) &ndash;&gt;-->
+    <corners android:radius="16dp"/> <!-- קביעת רדיוס העיגול לפינות -->
+</shape>

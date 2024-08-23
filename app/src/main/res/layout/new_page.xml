@@ -20,7 +20,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.5" android:layout_marginTop="68dp"/>
+            app:layout_constraintHeight_percent="0.5" android:layout_marginTop="52dp"/>
     <Button
             android:id="@+id/button"
             android:layout_width="116dp"
@@ -31,42 +31,47 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:backgroundTint="#FFA500"
             app:layout_constraintHorizontal_bias="0.498" android:layout_marginTop="40dp"/>
+
     <Button
             android:id="@+id/reloadButton"
-            android:layout_width="179dp"
-            android:layout_height="48dp"
+            android:layout_width="153dp"
+            android:layout_height="40dp"
             android:text="צור דף חדש"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:backgroundTint="#FFA500"
             tools:ignore="MissingConstraints" app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintBottom_toTopOf="@+id/buttonNextPage"/>
-
+            android:layout_marginTop="12dp" app:layout_constraintBottom_toTopOf="@+id/EndButton"/>
     <ImageView
             android:id="@+id/imageView"
-            android:layout_width="326dp"
-            android:layout_height="261dp"
-            android:scaleType="centerCrop"
+            android:layout_width="339dp"
+            android:layout_height="291dp"
+            android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:contentDescription="Generated Image"
-            app:layout_constraintHorizontal_bias="0.494"
             tools:ignore="MissingConstraints" app:layout_constraintTop_toBottomOf="@+id/button"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="4dp"
+            android:background="@drawable/rounded_corners"
+
+    />
     <Button
             android:id="@+id/buttonPrevPage"
             android:layout_width="70dp"
             android:layout_height="52dp"
             android:text="→"
             android:textSize="25sp"
+            android:textStyle="bold"
             android:backgroundTint="#FFA500"
-            android:layout_marginStart="36dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="32dp"
             android:layout_gravity="center"
             android:textColor="#FFFFFF"
-            app:layout_constraintTop_toBottomOf="@+id/reloadButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.512"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="14dp"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintVertical_bias="0.0" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.105"/>
     <Button
             android:id="@+id/buttonNextPage"
             android:layout_width="70dp"
@@ -74,13 +79,16 @@
             android:text="←"
             android:textSize="25sp"
             android:backgroundTint="#FFA500"
-            android:layout_marginStart="36dp"
-            android:layout_marginEnd="16dp"
             android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="32dp"
-            app:layout_constraintStart_toEndOf="@+id/buttonPrevPage" app:layout_constraintHorizontal_bias="0.99"/>
-
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="32dp"
+            android:layout_marginTop="14dp"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintVertical_bias="0.0" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.894"/>
     <Button
             android:id="@+id/EndButton"
             android:layout_width="98dp"
@@ -88,18 +96,27 @@
             android:text="סיום "
             android:backgroundTint="#F07E5A"
             tools:ignore="MissingConstraints"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reloadButton"
-            app:layout_constraintEnd_toStartOf="@+id/buttonNextPage"
-            app:layout_constraintStart_toEndOf="@+id/buttonPrevPage" app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintVertical_bias="0.275"/>
+            android:layout_marginTop="40dp"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.619" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.501"/>
     <Spinner
             android:id="@+id/styleSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="136dp"
+            android:layout_height="20dp"
             app:layout_constraintTop_toBottomOf="@+id/editTextText2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp" app:layout_constraintHorizontal_bias="0.814"
+            app:layout_constraintBottom_toTopOf="@+id/button" app:layout_constraintVertical_bias="0.0"/>
+    <TextView
+            android:text="סגנון התמונה:"
+            android:layout_width="96dp"
+            android:layout_height="27dp" android:id="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextText2"
+            android:layout_marginTop="8dp" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button" app:layout_constraintHorizontal_bias="0.193"
+            app:layout_constraintVertical_bias="0.0"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

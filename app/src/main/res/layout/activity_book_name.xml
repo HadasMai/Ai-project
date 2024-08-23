@@ -12,6 +12,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="מהו שם הספר שלך?"
+            android:textStyle="bold"
             android:textSize="18sp"
             android:paddingBottom="8dp"
             android:importantForAccessibility="yes"

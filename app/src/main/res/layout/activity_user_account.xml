@@ -8,35 +8,41 @@
 
     <TextView
             android:id="@+id/welcomeText"
-            android:layout_width="wrap_content"
+            android:layout_width="353dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="58dp"
             android:text="ברוך הבא"
             android:textSize="24sp"
             android:textColor="@android:color/black" android:layout_alignParentEnd="true"
-            android:layout_marginEnd="154dp"/>
+            android:layout_marginEnd="33dp" android:layout_alignParentStart="true" android:layout_marginStart="25dp"
+            android:layout_alignParentTop="true"/>
+    <Button
+            android:id="@+id/createNewBookBtn"
+            android:layout_width="191dp"
+            android:layout_height="wrap_content"
+            android:text="צור ספר חדש"
+            android:backgroundTint="#FFA500"
+            android:textColor="@android:color/white"
+            android:padding="10dp" android:layout_alignParentEnd="true" android:layout_marginEnd="106dp"
+            android:layout_alignParentStart="true" android:layout_marginStart="114dp" android:layout_marginTop="14dp"
+            android:layout_below="@+id/myBooksHistoryBtn"/>
     <Button
             android:id="@+id/myBooksHistoryBtn"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/welcomeText"
-            android:layout_marginTop="220dp"
             android:text="היסטורית ספרים שלי"
             android:backgroundTint="#FFA500"
             android:textColor="@android:color/white"
             android:padding="10dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="109dp" android:layout_alignParentStart="true" android:layout_marginStart="102dp"/>
-    <Button
-            android:id="@+id/createNewBookBtn"
-            android:layout_width="205dp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/myBooksHistoryBtn"
-            android:layout_marginTop="30dp"
-            android:text="צור ספר חדש"
-            android:backgroundTint="#FFA500"
-            android:textColor="@android:color/white"
-            android:padding="10dp"/>
+            android:layout_marginEnd="107dp" android:layout_alignParentStart="true" android:layout_marginStart="104dp"
+            android:layout_marginTop="21dp" android:layout_below="@+id/imageView5"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="404dp" app:srcCompat="@drawable/children_logo" android:id="@+id/imageView5"
+            android:layout_alignParentEnd="true" android:layout_marginEnd="35dp" android:layout_alignParentStart="true"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="57dp"
+            android:layout_below="@+id/welcomeText"/>
 
 </RelativeLayout>
