@@ -169,6 +169,17 @@ public class HeroStoryQuestions extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 editTextAnimalType.setVisibility(View.GONE);
+
+                // Reset all buttons
+                buttonChild.setSelected(false);
+                buttonGirl.setSelected(false);
+                buttonMan.setSelected(false);
+                buttonWoman.setSelected(false);
+                buttonAnimal.setSelected(false);
+
+                // Set the clicked button as selected
+                v.setSelected(true);
+
                 int id = v.getId();
                 if (id == R.id.button_child) {
                     characterType = "boy";
@@ -178,13 +189,18 @@ public class HeroStoryQuestions extends AppCompatActivity {
                     characterType = "man";
                 } else if (id == R.id.button_woman) {
                     characterType = "woman";
+                } else if (id == R.id.button_animal) {
+                    characterType = "חיה";
+                    editTextAnimalType.setVisibility(View.VISIBLE);
                 }
             }
         };
+
         buttonChild.setOnClickListener(setCharacterTypeListener);
         buttonGirl.setOnClickListener(setCharacterTypeListener);
         buttonMan.setOnClickListener(setCharacterTypeListener);
         buttonWoman.setOnClickListener(setCharacterTypeListener);
+        buttonAnimal.setOnClickListener(setCharacterTypeListener);
 
         buttonDescribeHero.setOnClickListener(new View.OnClickListener() {
             @Override
