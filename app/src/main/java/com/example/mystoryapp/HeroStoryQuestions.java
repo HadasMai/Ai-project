@@ -109,6 +109,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -124,7 +125,8 @@ public class HeroStoryQuestions extends AppCompatActivity {
 
     private EditText editTextHeroName;
     private EditText editTextAnimalType;
-    private Button buttonChild, buttonGirl, buttonMan, buttonWoman, buttonAnimal, buttonDescribeHero;
+    private Button  buttonDescribeHero;
+    private ImageButton buttonChild, buttonGirl, buttonMan, buttonWoman, buttonAnimal;
     private String characterType = "";
     private FirebaseAuth firebaseAuth;
     private DatabaseReference booksRef;

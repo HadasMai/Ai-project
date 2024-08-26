@@ -316,7 +316,7 @@ public class NewPage extends AppCompatActivity {
 
         RequestBody body = RequestBody.create(json.toString(), JSON);
         Request request = new Request.Builder()
-                .url("http://192.168.215.110:5000/getText")
+                .url("http://192.168.205.110:5000/getText")
                 .post(body)
                 .build();
 
@@ -415,21 +415,6 @@ public class NewPage extends AppCompatActivity {
             }
         });
     }
-//    private void updateNavigationButtons() {
-//        buttonPrevPage.setVisibility(currentPageNumber > 1 ? View.VISIBLE : View.GONE);
-//        pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@Nullable DataSnapshot snapshot) {
-//                long totalPages = snapshot.getChildrenCount();
-//            //    buttonNextPage.setVisibility(currentPageNumber < totalPages || !isEditing ? View.VISIBLE : View.GONE);
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@Nullable DatabaseError error) {
-//                Toast.makeText(NewPage.this, "Failed to update navigation buttons", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+
 }
 
