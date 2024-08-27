@@ -72,9 +72,13 @@ public class MyBooksHistory extends AppCompatActivity {
                     for (DataSnapshot bookSnapshot : snapshot.getChildren()) {
                         String bookTitle = bookSnapshot.child("bookName").getValue(String.class);
                         String bookId = bookSnapshot.getKey();
-                        bookTitles.add(bookTitle != null ? bookTitle : "שם לא זמין");
-                        if (bookId != null) {
-                            booksMap.put(bookId, bookTitle != null ? bookTitle : "שם לא זמין");
+
+                        // הוסף רק אם bookTitle אינו null
+                        if (bookTitle != null) {
+                            bookTitles.add(bookTitle);
+                            if (bookId != null) {
+                                booksMap.put(bookId, bookTitle);
+                            }
                         }
                     }
                     adapter.notifyDataSetChanged();
