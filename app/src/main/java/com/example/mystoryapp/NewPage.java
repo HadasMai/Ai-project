@@ -1,7 +1,10 @@
 package com.example.mystoryapp;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -177,6 +180,32 @@ public class NewPage extends AppCompatActivity {
                 loadExistingPage(currentPageNumber + 1);
             }
         });
+        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        boolean showDialog = preferences.getBoolean("showDialog", true);
+
+        if (showDialog) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(NewPage.this);
+            View dialogView = getLayoutInflater().inflate(R.layout.dialog_checkbox, null);
+            builder.setView(dialogView);
+
+            CheckBox dontShowAgain = dialogView.findViewById(R.id.dialog_checkbox);
+
+            builder.setPositiveButton("בסדר", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // שמור את הבחירה ב-SharedPreferences אם המשתמש סימן את תיבת הסימון
+                    if (dontShowAgain.isChecked()) {
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean("showDialog", false);
+                        editor.apply();
+                    }
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
     private void fetchDataFromFirebase() {

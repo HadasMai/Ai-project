@@ -30,14 +30,14 @@
         <activity
                 android:name=".MainActivity"
                 android:exported="true">
-            <!-- הסר את ה-intent-filter מהפעילות הראשית -->
+
         </activity>
 
         <activity
                 android:name=".SplashActivity"
                 android:screenOrientation="fullSensor"
                 android:exported="true">
-            <!-- השאר את ה-intent-filter במסך הפתיחה -->
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

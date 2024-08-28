@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:padding="20dp"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <TextView
+            android:id="@+id/dialog_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="העמוד שלך נשמר בהצלחה, הנך מועבר/ת לדף הבא.\n בכל שלב אפשר לנווט בין הדפים על ידי שימוש בחיצים"
+            android:textSize="18sp"/>
+
+    <CheckBox
+            android:id="@+id/dialog_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="הבנתי, אל תראה את ההודעה שוב"/>
+
+</LinearLayout>

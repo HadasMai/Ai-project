@@ -25,7 +25,7 @@
             android:id="@+id/button"
             android:layout_width="116dp"
             android:layout_height="48dp"
-            android:text="צור תמונות"
+            android:text="צור תמונה"
             app:layout_constraintTop_toBottomOf="@+id/editTextText2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

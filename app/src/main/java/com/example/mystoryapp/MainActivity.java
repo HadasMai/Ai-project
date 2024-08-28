@@ -1,5 +1,7 @@
 package com.example.mystoryapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.Nullable;
@@ -32,7 +34,9 @@ import okhttp3.Response;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-
+import android.app.AlertDialog;
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
 
@@ -45,5 +49,22 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(MainActivity.this, WelcomePage.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // יצירת חלון קופץ
+        super.onBackPressed();
+        new AlertDialog.Builder(this)
+                .setMessage("האם אתה בטוח שברצונך לצאת מהאפליקציה?")
+                .setCancelable(false)
+                .setPositiveButton("כן", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // סגור את האפליקציה
+                        finishAffinity();
+                    }
+                })
+                .setNegativeButton("לא", null)
+                .show();
     }
 }
