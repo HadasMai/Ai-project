@@ -9,13 +9,16 @@
             android:id="@+id/dialog_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="העמוד שלך נשמר בהצלחה, הנך מועבר/ת לדף הבא.\n בכל שלב אפשר לנווט בין הדפים על ידי שימוש בחיצים"
+            android:text="ראשית יש להזין טקסט לתוך תיבת הטקסט, ולאחר מכן יש לבחור סגנון תמונה שאתם רוצים,
+ואז לחצו על הכפתור צור תמונה, וקבלו לאחר מספר שניות תמונה.
+\nלא אהבתם את התמונה? אין בעיה! ניתן ללחוץ שוב על צור תמונה וקבלו תמונה חדשה!\n\nהנך מועבר/ת לדף חדש.\nבכל שלב אפשר לנווט בין הדפים על ידי שימוש בחיצים."
+
             android:textSize="18sp"/>
 
     <CheckBox
             android:id="@+id/dialog_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="הבנתי, אל תראה את ההודעה שוב"/>
-
+            android:text="הבנתי, אל תראה את ההודעה שוב"
+            android:buttonTint="#FFA500"/> <!-- כאן שינינו את צבע הסימון לכתום -->
 </LinearLayout>

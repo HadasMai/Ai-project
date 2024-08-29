@@ -7,11 +7,42 @@
         android:background="@drawable/watercolor_orange"
         android:padding="16dp">
 
+    <ImageView
+            android:layout_width="127dp"
+            android:layout_height="107dp" app:srcCompat="@drawable/logo_boy_girl" android:id="@+id/imageView8"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toTopOf="@+id/bookNamePromptTv"
+            app:layout_constraintHorizontal_bias="1.0" app:layout_constraintVertical_bias="0.222"/>
+    <Button
+            android:id="@+id/submitBtn"
+            android:layout_width="304dp"
+            android:layout_height="51dp"
+            android:text="התחל לכתוב את הסיפור"
+            android:fontFamily="@font/dgl_hollywood"
+            android:backgroundTint="#FFA500"
+            android:importantForAccessibility="yes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintTop_toBottomOf="@+id/bookNameEt" android:layout_marginTop="56dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.0"/>
+    <EditText
+            android:id="@+id/bookNameEt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="שם הספר"
+            android:fontFamily="@font/dgl_hollywood"
+            android:importantForAccessibility="yes"
+            app:layout_constraintTop_toBottomOf="@+id/bookNamePromptTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0" android:layout_marginTop="16dp"/>
     <TextView
             android:id="@+id/bookNamePromptTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="מהו שם הספר שלך?"
+            android:fontFamily="@font/dgl_hollywood"
             android:textStyle="bold"
             android:textSize="18sp"
             android:paddingBottom="8dp"
@@ -19,28 +50,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="88dp" app:layout_constraintHorizontal_bias="1.0"/>
-    <EditText
-            android:id="@+id/bookNameEt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="שם הספר"
-            android:importantForAccessibility="yes"
-            app:layout_constraintTop_toBottomOf="@+id/bookNamePromptTv"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0" android:layout_marginTop="12dp"/>
-    <Button
-            android:id="@+id/submitBtn"
-            android:layout_width="304dp"
-            android:layout_height="51dp"
-            android:text="התחל לכתוב את הסיפור"
-            android:backgroundTint="#FFA500"
-            android:importantForAccessibility="yes"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="440dp" app:layout_constraintHorizontal_bias="0.64"
-            app:layout_constraintTop_toBottomOf="@+id/bookNameEt" app:layout_constraintVertical_bias="0.566"/>
+            android:layout_marginTop="152dp" app:layout_constraintHorizontal_bias="0.0"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

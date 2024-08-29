@@ -10,42 +10,47 @@
 
     <TextView
             android:id="@+id/welcomeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="317dp"
+            android:layout_height="71dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="100dp"
-            android:text="ברוך הבא"
+            android:text="שמחים לראות אותך!  קדימה... נתחיל! "
+            android:fontFamily="@font/dgl_hollywood"
             android:textSize="24sp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"/>
 
     <Button
             android:id="@+id/registerBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/welcomeText"
-            android:text="להירשם"
+            android:text="פעם ראשונה? להירשם"
+            android:fontFamily="@font/dgl_hollywood"
             android:backgroundTint="#FFA500"
             android:textColor="@android:color/white"
             android:padding="10dp" android:layout_marginTop="20dp" android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" android:layout_marginBottom="20dp"/>
+            android:layout_marginEnd="20dp" android:layout_marginBottom="20dp" android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"/>
 
     <Button
             android:id="@+id/loginBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/registerBtn"
-            android:text="משתמש קיים? התחבר"
+            android:text="משתמש קיים? להתחבר"
+            android:fontFamily="@font/dgl_hollywood"
             android:backgroundTint="#FFA500"
             android:textColor="@android:color/white"
             android:padding="10dp" android:layout_marginTop="20dp" android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" android:layout_marginBottom="20dp"/>
+            android:layout_marginEnd="20dp" android:layout_marginBottom="20dp" android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"/>
     <ImageView
-            android:layout_width="407dp"
-            android:layout_height="413dp"
-            app:srcCompat="@drawable/children"
+            android:layout_width="316dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/new_logo"
             android:id="@+id/imageView2"
-            android:layout_alignParentBottom="true" android:layout_marginBottom="9dp"
-            android:layout_alignParentEnd="true" android:layout_marginEnd="0dp" android:layout_alignParentStart="true"
-            android:layout_marginStart="4dp" android:layout_marginTop="0dp" android:layout_below="@+id/loginBtn"/>
+            android:layout_alignParentBottom="true" android:layout_marginBottom="37dp"
+            android:layout_alignParentEnd="true" android:layout_marginEnd="28dp" android:layout_alignParentStart="true"
+            android:layout_marginStart="67dp" android:layout_marginTop="17dp" android:layout_below="@+id/loginBtn"/>
 
 </RelativeLayout>

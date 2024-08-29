@@ -11,16 +11,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="אימייל"
+            android:textStyle="bold"
             android:inputType="textEmailAddress"
             android:padding="10dp"
-            android:layout_marginTop="20dp" android:layout_marginStart="20dp" android:layout_marginEnd="20dp"
-            android:layout_marginBottom="48dp" android:layout_above="@+id/passwordEt"
+            android:layout_marginTop="20dp" android:layout_marginStart="21dp" android:layout_marginEnd="19dp"
+            android:layout_marginBottom="21dp" android:layout_above="@+id/passwordEt"
             android:layout_alignParentEnd="true" android:layout_alignParentStart="true"/>
     <EditText
             android:id="@+id/passwordEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="סיסמא"
+            android:textStyle="bold"
             android:inputType="textPassword"
             android:padding="10dp"
             android:layout_marginStart="20dp" android:layout_marginEnd="20dp"
@@ -30,17 +32,27 @@
             android:id="@+id/loginBtn"
             android:layout_width="188dp"
             android:layout_height="wrap_content"
-            android:text="התחבר"
+            android:text="להתחבר"
+            android:fontFamily="@font/dgl_hollywood"
             android:backgroundTint="#FFA500"
             android:textColor="@android:color/white"
             android:padding="10dp" android:layout_marginBottom="326dp"
             android:layout_marginStart="113dp" android:layout_marginEnd="108dp" android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true" android:layout_alignParentStart="true"/>
     <ImageView
-            android:layout_width="129dp"
-            android:layout_height="143dp" app:srcCompat="@drawable/logo_boy_girl" android:id="@+id/imageView4"
-            android:layout_alignParentEnd="true" android:layout_marginEnd="14dp" android:layout_alignParentStart="true"
-            android:layout_marginStart="266dp" android:layout_above="@+id/emailEt" android:layout_marginBottom="12dp"
-            android:layout_marginTop="11dp" android:layout_alignParentTop="true"/>
+            android:layout_width="wrap_content"
+            android:layout_height="123dp" app:srcCompat="@drawable/logo_boy_girl" android:id="@+id/imageView4"
+            android:layout_alignParentEnd="true" android:layout_marginEnd="12dp" android:layout_alignParentStart="true"
+            android:layout_marginStart="268dp"
+            android:layout_marginTop="9dp" android:layout_alignParentTop="true"/>
+    <TextView
+            android:text="עוד רגע מתחילים! רק צריך למלא את הפרטים:"
+            android:fontFamily="@font/dgl_hollywood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/textView3" android:layout_alignParentEnd="true"
+            android:layout_marginEnd="25dp"
+            android:layout_alignParentStart="true" android:layout_marginStart="20dp"
+            android:layout_above="@+id/emailEt"
+            android:layout_marginBottom="15dp"/>
 
 </RelativeLayout>

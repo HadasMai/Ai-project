@@ -180,34 +180,28 @@ public class NewPage extends AppCompatActivity {
                 loadExistingPage(currentPageNumber + 1);
             }
         });
-        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        boolean showDialog = preferences.getBoolean("showDialog", true);
-
-        if (showDialog) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(NewPage.this);
-            View dialogView = getLayoutInflater().inflate(R.layout.dialog_checkbox, null);
-            builder.setView(dialogView);
-
-            CheckBox dontShowAgain = dialogView.findViewById(R.id.dialog_checkbox);
-
-            builder.setPositiveButton("בסדר", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // שמור את הבחירה ב-SharedPreferences אם המשתמש סימן את תיבת הסימון
-                    if (dontShowAgain.isChecked()) {
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putBoolean("showDialog", false);
-                        editor.apply();
-                    }
-                    dialog.dismiss();
-                }
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
+        // Show instructions dialog only on the first page
+        if (currentPageNumber == 1) {
+            showInstructionsDialog();
         }
     }
+    private void showInstructionsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(NewPage.this);
+        builder.setTitle("הוראות");
+        builder.setMessage("ראשית יש להזין טקסט לתוך תיבת הטקסט, ולאחר מכן יש לבחור סגנון תמונה שאתם רוצים,\n " +
+                "ואז לחצו על הכפתור צור תמונה, וקבלו לאחר מספר שניות תמונה.\n\n" +
+                "לא אהבתם את התמונה? אין בעיה! ניתן ללחוץ שוב על צור תמונה וקבלו תמונה חדשה!\n\n" +
+                "הנך מועבר/ת לדף חדש.\nבכל שלב אפשר לנווט בין הדפים על ידי שימוש בחיצים.");
+        builder.setPositiveButton("הבנתי", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
 
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
     private void fetchDataFromFirebase() {
         booksRef.child(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -345,7 +339,7 @@ public class NewPage extends AppCompatActivity {
 
         RequestBody body = RequestBody.create(json.toString(), JSON);
         Request request = new Request.Builder()
-                .url("http://192.168.205.110:5000/getText")
+                .url("http://192.168.102.110:5000/getText")
                 .post(body)
                 .build();
 

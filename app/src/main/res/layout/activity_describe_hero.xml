@@ -8,148 +8,155 @@
         android:background="@drawable/watercolor_orange"
         android:padding="16dp">
 
-    <!-- כותרת ראשית -->
 
-    <!-- גיל -->
-
-    <!-- צבע שיער -->
-
-    <!-- סוג שיער -->
-
-    <!-- צבע עיניים -->
-
-    <!-- צבע עור -->
-
-    <!-- כפתור -->
-    <EditText
-            android:id="@+id/skinColorEt"
-            android:layout_width="274dp"
-            android:layout_height="42dp"
-            android:hint="צבע עור"
-            android:importantForAccessibility="yes"
-            app:layout_constraintStart_toEndOf="@+id/skinColorLabel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/eyeColorEt"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp" app:layout_constraintHorizontal_bias="1.0"/>
-    <EditText
-            android:id="@+id/hairColorEt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="צבע שיער"
-            android:importantForAccessibility="yes"
-            app:layout_constraintStart_toEndOf="@+id/hairColorLabel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ageEt"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp" app:layout_constraintHorizontal_bias="1.0"/>
-    <TextView
-            android:id="@+id/eyeColorLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="צבע עיניים:"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hairTypeSpinner"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="52dp"/>
-    <TextView
-            android:id="@+id/hairTypeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="סוג שיער:"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hairColorEt"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="48dp"/>
-    <Spinner
-            android:id="@+id/hairTypeSpinner"
-            android:layout_width="281dp"
-            android:layout_height="24dp"
-            android:entries="@array/hair_types"
-            android:importantForAccessibility="yes"
-            app:layout_constraintStart_toEndOf="@+id/hairTypeLabel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hairColorEt"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="44dp" app:layout_constraintHorizontal_bias="0.6"/>
-    <TextView
-            android:id="@+id/ageLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="גיל:"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/heroDescriptionTitle"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="44dp"/>
-    <TextView
-            android:id="@+id/hairColorLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="צבע שיער:"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ageEt"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="24dp"/>
-    <TextView
-            android:id="@+id/heroDescriptionTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="תיאור הגיבור שלך:"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="52dp"
-            android:gravity="center" app:layout_constraintHorizontal_bias="0.309"/>
     <EditText
             android:id="@+id/ageEt"
             android:layout_width="295dp"
             android:layout_height="49dp"
             android:hint="גיל"
+            android:fontFamily="@font/dgl_hollywood"
             android:inputType="number"
             android:importantForAccessibility="yes"
             app:layout_constraintStart_toEndOf="@+id/ageLabel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/heroDescriptionTitle"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="28dp" app:layout_constraintHorizontal_bias="0.938"/>
+            android:layout_marginTop="32dp" app:layout_constraintHorizontal_bias="0.744"/>
     <TextView
-            android:id="@+id/skinColorLabel"
+            android:id="@+id/hairColorLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="צבע עור:"
+            android:text="צבע שיער:"
+            android:fontFamily="@font/dgl_hollywood"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/eyeColorEt"
+            app:layout_constraintTop_toBottomOf="@id/ageEt"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="36dp"/>
+            android:layout_marginTop="20dp"/>
+    <Spinner
+            android:id="@+id/hairTypeSpinner"
+            android:layout_width="281dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/hair_types"
+            android:importantForAccessibility="yes"
+            app:layout_constraintStart_toEndOf="@+id/hairTypeLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hairColorEt"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="28dp"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:textAppearance="@style/SpinnerTextStyle"/>
     <EditText
             android:id="@+id/eyeColorEt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="צבע עיניים"
+            android:fontFamily="@font/dgl_hollywood"
             android:importantForAccessibility="yes"
             app:layout_constraintStart_toEndOf="@+id/eyeColorLabel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/hairTypeSpinner"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp" app:layout_constraintHorizontal_bias="1.0"/>
+            android:layout_marginTop="48dp" app:layout_constraintHorizontal_bias="0.0"/>
+    <TextView
+            android:id="@+id/heroDescriptionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="תיאור הגיבור שלך:"
+            android:fontFamily="@font/dgl_hollywood"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="96dp"
+            android:gravity="center" app:layout_constraintHorizontal_bias="0.025"/>
+    <TextView
+            android:id="@+id/hairTypeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="סוג שיער:"
+            android:fontFamily="@font/dgl_hollywood"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hairColorEt"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="32dp"/>
     <Button
             android:id="@+id/submitBtn"
             android:layout_width="172dp"
             android:layout_height="58dp"
             android:text="המשך"
+            android:fontFamily="@font/dgl_hollywood"
             android:backgroundTint="#FFA500"
             android:importantForAccessibility="yes"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.55"
-            app:layout_constraintTop_toBottomOf="@+id/skinColorEt" android:layout_marginTop="20dp"/>
+            app:layout_constraintHorizontal_bias="0.507"
+            app:layout_constraintTop_toBottomOf="@+id/skinColorEt" android:layout_marginTop="64dp"/>
+    <EditText
+            android:id="@+id/hairColorEt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="צבע שיער"
+            android:fontFamily="@font/dgl_hollywood"
+            android:importantForAccessibility="yes"
+            app:layout_constraintStart_toEndOf="@+id/hairColorLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ageEt"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp" app:layout_constraintHorizontal_bias="0.0"/>
+    <TextView
+            android:id="@+id/skinColorLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="צבע עור:"
+            android:fontFamily="@font/dgl_hollywood"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/eyeColorEt"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="60dp"/>
+    <ImageView
+            android:layout_width="111dp"
+            android:layout_height="106dp" app:srcCompat="@drawable/logo_boy_girl" android:id="@+id/imageView8"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toTopOf="@+id/heroDescriptionTitle"
+            app:layout_constraintHorizontal_bias="1.0" app:layout_constraintVertical_bias="1.0"/>
+    <TextView
+            android:id="@+id/ageLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="גיל:"
+            android:fontFamily="@font/dgl_hollywood"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/heroDescriptionTitle"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="48dp"/>
+    <EditText
+            android:id="@+id/skinColorEt"
+            android:layout_width="274dp"
+            android:layout_height="42dp"
+            android:hint="צבע עור"
+            android:fontFamily="@font/dgl_hollywood"
+            android:importantForAccessibility="yes"
+            app:layout_constraintStart_toEndOf="@+id/skinColorLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/eyeColorEt"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="44dp" app:layout_constraintHorizontal_bias="0.666"/>
+    <TextView
+            android:id="@+id/eyeColorLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="צבע עיניים:"
+            android:fontFamily="@font/dgl_hollywood"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hairTypeSpinner"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="68dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

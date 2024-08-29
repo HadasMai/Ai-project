@@ -12,10 +12,11 @@
 
     <TextView
             android:text="להתראות!"
+            android:fontFamily="@font/dgl_hollywood"
             android:textSize="58sp"
             android:textStyle="bold"
-            android:layout_width="277dp"
-            android:layout_height="92dp" android:id="@+id/textView2"
+            android:layout_width="299dp"
+            android:layout_height="90dp" android:id="@+id/textView2"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

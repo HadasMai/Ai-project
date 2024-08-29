@@ -1,0 +1,12 @@
+<resources>
+    <!-- סגנון עבור טקסטים ב-Spinner -->
+    <style name="SpinnerTextStyle">
+        <item name="android:fontFamily">@font/dgl_hollywood</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <!-- סגנון עבור רמזים -->
+    <style name="HintTextStyle">
+        <item name="android:fontFamily">@font/dgl_hollywood</item>
+    </style>
+
+</resources>

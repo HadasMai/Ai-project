@@ -24,6 +24,6 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 4900);  // 5000 מילישניות = 5 שניות
+        }, 6300);  // 5000 מילישניות = 5 שניות
     }
 }

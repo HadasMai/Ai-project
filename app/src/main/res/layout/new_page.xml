@@ -8,24 +8,34 @@
         android:background="@drawable/watercolor_orange"
         tools:context=".NewPage">
 
+    <ImageView
+            android:layout_width="84dp"
+            android:layout_height="62dp" app:srcCompat="@drawable/logo_boy_girl" android:id="@+id/imageView7"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="4dp" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.951" app:layout_constraintBottom_toTopOf="@+id/editTextText2"
+            app:layout_constraintVertical_bias="0.631"/>
     <EditText
             android:id="@+id/editTextText2"
-            android:layout_width="309dp"
-            android:layout_height="166dp"
+            android:layout_width="316dp"
+            android:layout_height="154dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:inputType="textMultiLine"
-            android:hint="הכנס טקסט"
+            android:hint="הטקסט לעמוד"
+            android:fontFamily="@font/dgl_hollywood"
             android:background="@drawable/edit_text_border"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.5" android:layout_marginTop="52dp"/>
+            app:layout_constraintHeight_percent="0.5" android:layout_marginTop="80dp"
+            app:layout_constraintHorizontal_bias="0.492"/>
     <Button
             android:id="@+id/button"
-            android:layout_width="116dp"
-            android:layout_height="48dp"
+            android:layout_width="153dp"
+            android:layout_height="42dp"
             android:text="צור תמונה"
+            android:fontFamily="@font/dgl_hollywood"
             app:layout_constraintTop_toBottomOf="@+id/editTextText2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,6 +47,7 @@
             android:layout_width="153dp"
             android:layout_height="40dp"
             android:text="צור דף חדש"
+            android:fontFamily="@font/dgl_hollywood"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:backgroundTint="#FFA500"
@@ -60,6 +71,7 @@
             android:layout_width="70dp"
             android:layout_height="52dp"
             android:text="→"
+            android:fontFamily="@font/dgl_hollywood"
             android:textSize="25sp"
             android:textStyle="bold"
             android:backgroundTint="#FFA500"
@@ -77,6 +89,7 @@
             android:layout_width="70dp"
             android:layout_height="52dp"
             android:text="←"
+            android:fontFamily="@font/dgl_hollywood"
             android:textSize="25sp"
             android:backgroundTint="#FFA500"
             android:textColor="#FFFFFF"
@@ -94,6 +107,7 @@
             android:layout_width="98dp"
             android:layout_height="48dp"
             android:text="סיום "
+            android:fontFamily="@font/dgl_hollywood"
             android:backgroundTint="#F07E5A"
             tools:ignore="MissingConstraints"
             android:layout_marginTop="40dp"
@@ -111,10 +125,11 @@
             app:layout_constraintBottom_toTopOf="@+id/button" app:layout_constraintVertical_bias="0.0"/>
     <TextView
             android:text="סגנון התמונה:"
-            android:layout_width="96dp"
-            android:layout_height="27dp" android:id="@+id/textView"
+            android:layout_width="125dp"
+            android:layout_height="21dp" android:id="@+id/textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextText2"
+            android:fontFamily="@font/dgl_hollywood"
             android:layout_marginTop="8dp" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/button" app:layout_constraintHorizontal_bias="0.193"
             app:layout_constraintVertical_bias="0.0"/>

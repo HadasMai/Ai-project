@@ -4,16 +4,12 @@
               android:gravity="center"
               android:background="@color/white">
 
-<!--    <ImageView-->
-<!--            android:layout_width="600dp"-->
-<!--            android:layout_height="669dp"-->
-<!--            android:src="@drawable/my_story_logo"/>-->
 
     <pl.droidsonroids.gif.GifImageView
             android:id="@+id/gifImageView"
-            android:layout_width="384dp"
+            android:layout_width="289dp"
             android:layout_height="632dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/my_story_gif"/>
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo_new"/>
 
 </LinearLayout>

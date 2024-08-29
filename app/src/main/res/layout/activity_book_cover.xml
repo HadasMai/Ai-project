@@ -8,12 +8,19 @@
         android:background="@drawable/watercolor_orange"
         tools:context=".BookCoverActivity">
 
+    <ImageView
+            android:layout_width="127dp"
+            android:layout_height="107dp" app:srcCompat="@drawable/logo_boy_girl" android:id="@+id/imageView8"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.978" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/bookTitleTextView" app:layout_constraintVertical_bias="0.075"/>
     <TextView
             android:id="@+id/bookTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:fontFamily="@font/dgl_hollywood"
             android:textColor="#000000"
             android:gravity="center"
             app:layout_constraintTop_toTopOf="parent"
@@ -26,7 +33,8 @@
             android:id="@+id/startReadingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="התחל לקרוא את הספר"
+            android:text="להתחיל לקרוא את הספר"
+            android:fontFamily="@font/dgl_hollywood"
             android:backgroundTint="#FFA500"
             app:layout_constraintTop_toBottomOf="@+id/bookTitleTextView"
             app:layout_constraintStart_toStartOf="parent"

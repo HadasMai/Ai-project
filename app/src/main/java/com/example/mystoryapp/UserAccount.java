@@ -72,7 +72,7 @@ public class UserAccount extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String name = snapshot.child("name").getValue(String.class);
-                    welcomeText.setText("שלום לך , " + name);
+                    welcomeText.setText("שלום לך, " + name);
                 } else {
                     Toast.makeText(UserAccount.this, "שם משתמש לא קיים", Toast.LENGTH_SHORT).show();
                 }
