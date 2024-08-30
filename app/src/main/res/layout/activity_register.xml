@@ -6,35 +6,80 @@
                 android:background="@drawable/watercolor_orange"
                 tools:context=".RegisterActivity">
 
-    <EditText
-            android:id="@+id/passwordEt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="בחר/י סיסמא"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:inputType="textPassword"
-            android:padding="10dp" android:layout_marginBottom="42dp"
-            android:layout_marginStart="20dp" android:layout_marginEnd="20dp"
-            android:layout_above="@+id/registerBtn"/>
     <TextView
-            android:text="עוד רגע מתחילים! רק צריך למלא את הפרטים:"
+            android:id="@+id/nameLabel"
+            android:layout_width="146dp"
+            android:layout_height="wrap_content"
+            android:text="שם משתמש:"
             android:fontFamily="@font/dgl_hollywood"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/textView3" android:layout_alignParentEnd="true"
-            android:layout_marginEnd="24dp"
-            android:layout_alignParentStart="true" android:layout_marginStart="21dp"
-            android:layout_above="@+id/nameEt" android:layout_marginBottom="12dp"/>
+            android:textColor="@android:color/black"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="247dp"
+            android:layout_alignTop="@+id/nameEt"
+            android:textSize="14sp" android:layout_marginTop="16dp" android:layout_alignParentStart="true"
+            android:layout_marginStart="18dp"/>
+    <EditText
+            android:id="@+id/nameEt"
+            android:layout_width="265dp"
+            android:layout_height="wrap_content"
+            android:hint="שם משתמש"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:layout_above="@+id/emailEt"
+            android:layout_marginEnd="39dp"
+            android:layout_marginBottom="19dp"
+            android:layout_alignParentEnd="true" android:layout_alignParentStart="true"
+            android:layout_marginStart="107dp"/>
+    <TextView
+            android:id="@+id/emailLabel"
+            android:layout_width="76dp"
+            android:layout_height="wrap_content"
+            android:text="אימייל:"
+            android:fontFamily="@font/dgl_hollywood"
+            android:textColor="@android:color/black"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="274dp"
+            android:layout_alignTop="@+id/emailEt"
+            android:textSize="14sp" android:layout_marginTop="21dp" android:layout_alignParentStart="true"
+            android:layout_marginStart="60dp"/>
     <EditText
             android:id="@+id/emailEt"
-            android:layout_width="match_parent"
+            android:layout_width="264dp"
             android:layout_height="wrap_content"
             android:hint="אימייל"
             android:textStyle="bold"
             android:inputType="textEmailAddress"
-            android:padding="10dp" android:layout_marginBottom="33dp"
-            android:layout_marginStart="22dp" android:layout_marginEnd="18dp" android:layout_above="@+id/passwordEt"
-            android:layout_alignParentEnd="true" android:layout_alignParentStart="true"/>
+            android:padding="10dp"
+            android:layout_marginEnd="41dp"
+            android:layout_marginBottom="27dp"
+            android:layout_above="@+id/passwordEt"
+            android:layout_alignParentEnd="true" android:layout_alignParentStart="true"
+            android:layout_marginStart="106dp"/>
+    <TextView
+            android:id="@+id/passwordLabel"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="סיסמא:"
+            android:fontFamily="@font/dgl_hollywood"
+            android:textColor="@android:color/black"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="271dp"
+            android:layout_alignTop="@+id/passwordEt"
+            android:textSize="14sp" android:layout_marginTop="16dp" android:layout_alignParentStart="true"
+            android:layout_marginStart="60dp"/>
+    <EditText
+            android:id="@+id/passwordEt"
+            android:layout_width="261dp"
+            android:layout_height="wrap_content"
+            android:hint="בחר/י סיסמא"
+            android:textStyle="bold"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:layout_marginEnd="39dp"
+            android:layout_marginBottom="91dp"
+            android:layout_above="@+id/registerBtn"
+            android:layout_alignParentEnd="true" android:layout_alignParentStart="true"
+            android:layout_marginStart="111dp"/>
     <Button
             android:id="@+id/registerBtn"
             android:layout_width="129dp"
@@ -43,26 +88,39 @@
             android:fontFamily="@font/dgl_hollywood"
             android:textColor="@android:color/white"
             android:backgroundTint="#FFA500"
-            android:padding="10dp" android:layout_marginStart="141dp"
-            android:layout_marginEnd="139dp" android:layout_marginBottom="262dp"
-            android:layout_alignParentBottom="true" android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"/>
-    <EditText
-            android:id="@+id/nameEt"
-            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:layout_marginStart="141dp"
+            android:layout_marginEnd="139dp"
+            android:layout_marginBottom="262dp"
+            android:layout_alignParentBottom="true" />
+
+    <!-- כותרת כללית -->
+    <TextView
+            android:text="עוד רגע מתחילים! רק צריך למלא את הפרטים:"
+            android:fontFamily="@font/dgl_hollywood"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="שם משתמש"
-            android:textStyle="bold"
-            android:padding="10dp" android:layout_marginStart="22dp"
-            android:layout_above="@+id/emailEt" android:layout_marginEnd="18dp" android:layout_marginBottom="20dp"
-            android:layout_alignParentStart="true" android:layout_alignParentEnd="true"
-    />
+            android:id="@+id/textView3"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="21dp"
+            android:layout_above="@+id/nameEt"
+            android:layout_marginBottom="12dp"/>
+
+    <!-- תמונה -->
     <ImageView
             android:layout_width="130dp"
-            android:layout_height="123dp" app:srcCompat="@drawable/logo_boy_girl" android:id="@+id/imageView3"
-            android:layout_alignParentStart="true" android:layout_marginStart="259dp"
+            android:layout_height="123dp"
+            app:srcCompat="@drawable/logo_boy_girl"
+            android:id="@+id/imageView3"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="259dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="23dp"
-            android:layout_marginTop="11dp" android:layout_alignParentTop="true" android:layout_above="@+id/textView3"
+            android:layout_marginTop="11dp"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/textView3"
             android:layout_marginBottom="15dp"/>
+
 </RelativeLayout>

@@ -362,7 +362,7 @@ public class NewPage extends AppCompatActivity {
                     lastGeneratedUrl = responseData;
                     runOnUiThread(() -> {
                         progressDialog.dismiss();
-                        Toast.makeText(NewPage.this, responseData, Toast.LENGTH_SHORT).show();
+//                          Toast.makeText(NewPage.this, responseData, Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "Server response: " + responseData);
                         loadImage(responseData);
                         updatePageInFirebase(editTextText2.getText().toString(), lastGeneratedUrl);
@@ -418,9 +418,10 @@ public class NewPage extends AppCompatActivity {
             pagesRef.child(pageId).updateChildren(pageData)
                     .addOnSuccessListener(aVoid -> Toast.makeText(NewPage.this, "Page updated successfully", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(e -> Toast.makeText(NewPage.this, "Failed to update page", Toast.LENGTH_SHORT).show());
-        } else {
-            Toast.makeText(NewPage.this, "Page ID is null", Toast.LENGTH_SHORT).show();
         }
+//        else {
+//            Toast.makeText(NewPage.this, "Page ID is null", Toast.LENGTH_SHORT).show();
+//        }
     }
     private void updateNavigationButtons() {
         buttonPrevPage.setVisibility(currentPageNumber > 1 ? View.VISIBLE : View.GONE);
