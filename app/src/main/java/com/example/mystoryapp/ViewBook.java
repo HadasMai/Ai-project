@@ -49,6 +49,7 @@ public class ViewBook extends AppCompatActivity {
     private Button buttonNextPage;
     private ImageView imageView;
     private Button exportPdfButton;
+    private Button menuButton;
 
     private DatabaseReference pagesRef;
     private DatabaseReference booksRef;
@@ -70,15 +71,14 @@ public class ViewBook extends AppCompatActivity {
         buttonNextPage = findViewById(R.id.buttonNextPage);
         imageView = findViewById(R.id.imageStory);
         exportPdfButton = findViewById(R.id.exportPdfButton);
+        menuButton = findViewById(R.id.menuButton);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
-            getSupportActionBar().setDisplayShowTitleEnabled(false); // מסתיר את הכותרת
-        }
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupMenu(v);
+            }
+        });
 
         bookId = getIntent().getStringExtra("bookId");
 
@@ -128,58 +128,33 @@ public class ViewBook extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.view_book_menu, menu);
-        for (int i = 0; i < menu.size(); i++) {
-            menu.getItem(i).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            View menuItemView = findViewById(R.id.toolbar); // או R.id.action_bar אם אתה משתמש ב-ActionBar
-            if (menuItemView == null) {
-                menuItemView = findViewById(android.R.id.home);
+    private void showPopupMenu(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        popup.getMenuInflater().inflate(R.menu.view_book_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_home) {
+                    Intent homeIntent = new Intent(ViewBook.this, UserAccount.class);
+                    startActivity(homeIntent);
+                    finish();
+                    return true;
+                } else if (itemId == R.id.action_download) {
+                    exportBookToPDF();
+                    return true;
+                } else if (itemId == R.id.action_edit) {
+                    Intent editIntent = new Intent(ViewBook.this, NewPage.class);
+                    editIntent.putExtra("bookId", bookId);
+                    editIntent.putExtra("pageNumber", currentPageIndex + 1);
+                    editIntent.putExtra("isEditing", true);
+                    startActivity(editIntent);
+                    return true;
+                }
+                return false;
             }
-
-            if (menuItemView != null) {
-                PopupMenu popup = new PopupMenu(this, menuItemView, Gravity.END);
-                popup.getMenuInflater().inflate(R.menu.view_book_menu, popup.getMenu());
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        int itemId = menuItem.getItemId();
-                        if (itemId == R.id.action_home) {
-                            Intent homeIntent = new Intent(ViewBook.this, UserAccount.class);
-                            startActivity(homeIntent);
-                            finish();
-                            return true;
-                        } else if (itemId == R.id.action_download) {
-                            exportBookToPDF();
-                            return true;
-                        } else if (itemId == R.id.action_edit) {
-                            Intent editIntent = new Intent(ViewBook.this, NewPage.class);
-                            editIntent.putExtra("bookId", bookId);
-                            editIntent.putExtra("pageNumber", currentPageIndex + 1); // כי האינדקס מתחיל מ-0
-                            editIntent.putExtra("isEditing", true);
-                            startActivity(editIntent);
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-
-                popup.show();
-            } else {
-                Toast.makeText(this, "לא ניתן למצוא עוגן לתפריט", Toast.LENGTH_SHORT).show();
-            }
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        });
+        popup.show();
     }
 
     private void fetchPagesFromFirebase() {
@@ -308,7 +283,7 @@ public class ViewBook extends AppCompatActivity {
                             if (userName != null) {
                                 try {
                                     PDFExporter.exportBookToPDF(ViewBook.this, pages, bookName, userName);
-                                    Toast.makeText(ViewBook.this, "PDF exported to Downloads folder", Toast.LENGTH_LONG).show();
+                                 //   Toast.makeText(ViewBook.this, "PDF exported to Downloads folder", Toast.LENGTH_LONG).show();
                                 } catch (Exception e) {
                                     Log.e("ViewBook", "Error exporting PDF: " + e.getMessage(), e);
                                     Toast.makeText(ViewBook.this, "Failed to export PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -366,4 +341,3 @@ public class ViewBook extends AppCompatActivity {
         public void setPageId(String pageId) { this.pageId = pageId; }
     }
 }
-

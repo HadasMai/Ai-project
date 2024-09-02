@@ -122,13 +122,13 @@ public class PDFExporter {
                 }
 
                 activity.runOnUiThread(() -> {
-                    Toast.makeText(activity, "PDF exported successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "הקובץ נשמר בהצלחה במכשיר", Toast.LENGTH_LONG).show();
                 });
 
             } catch (Exception e) {
                 Log.e("PDFExporter", "Error exporting PDF: " + e.getMessage(), e);
                 activity.runOnUiThread(() -> {
-                    Toast.makeText(activity, "Failed to export PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "בעיה בשמירת הקובץ " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
             }
         });

@@ -148,6 +148,7 @@ public class NewPage extends AppCompatActivity {
                 intent.putExtra("bookId", bookId);
                 intent.putExtra("isEditing", isEditing);
                 intent.putExtra("pageNumber", currentPageNumber);
+
                 startActivity(intent);
                 finish();
             }
@@ -180,10 +181,7 @@ public class NewPage extends AppCompatActivity {
                 loadExistingPage(currentPageNumber + 1);
             }
         });
-        // Show instructions dialog only on the first page
-        if (currentPageNumber == 1) {
-            showInstructionsDialog();
-        }
+
     }
     private void showInstructionsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(NewPage.this);
@@ -283,7 +281,7 @@ public class NewPage extends AppCompatActivity {
                     }
                 }
                 if (!pageFound) {
-                    Toast.makeText(NewPage.this, "Page not found. Creating a new page.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewPage.this, "העמוד לא נמצא, יוצר עמוד חדש...", Toast.LENGTH_SHORT).show();
                     createNewPageInFirebase();
                 }
             }
@@ -310,8 +308,12 @@ public class NewPage extends AppCompatActivity {
 
                     pagesRef.child(pageId).setValue(pageData)
                             .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(NewPage.this, "New page created", Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(NewPage.this, "New page created", Toast.LENGTH_SHORT).show();
                                 currentPageNumber = pageCount + 1;
+                                // Show instructions dialog only on the first page
+                                if (currentPageNumber == 1) {
+                                    showInstructionsDialog();
+                                }
                                 updateNavigationButtons();
                             })
                             .addOnFailureListener(e -> Toast.makeText(NewPage.this, "Failed to create new page", Toast.LENGTH_SHORT).show());
@@ -339,7 +341,7 @@ public class NewPage extends AppCompatActivity {
 
         RequestBody body = RequestBody.create(json.toString(), JSON);
         Request request = new Request.Builder()
-                .url("http://192.168.102.110:5000/getText")
+                .url("http://192.168.71.110:5000/getText")
                 .post(body)
                 .build();
 
@@ -351,7 +353,7 @@ public class NewPage extends AppCompatActivity {
                 Log.e(TAG, "Request failed", e);
                 runOnUiThread(() -> {
                     progressDialog.dismiss();
-                    Toast.makeText(NewPage.this, "Request Failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewPage.this, "הבקשה נכשלה", Toast.LENGTH_SHORT).show();
                 });
             }
 
@@ -416,7 +418,7 @@ public class NewPage extends AppCompatActivity {
             pageData.put("style", selectedStyle);
 
             pagesRef.child(pageId).updateChildren(pageData)
-                    .addOnSuccessListener(aVoid -> Toast.makeText(NewPage.this, "Page updated successfully", Toast.LENGTH_SHORT).show())
+                    // .addOnSuccessListener(aVoid -> Toast.makeText(NewPage.this, "Page updated successfully", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(e -> Toast.makeText(NewPage.this, "Failed to update page", Toast.LENGTH_SHORT).show());
         }
 //        else {

@@ -68,7 +68,7 @@ public class BookName extends AppCompatActivity {
                 .addOnSuccessListener(new com.google.android.gms.tasks.OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(BookName.this, "שם הספר נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+               //         Toast.makeText(BookName.this, "שם הספר נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(BookName.this, NewPage.class);
                         // Pass the bookId to HeroStoryQuestions
                         intent.putExtra("bookId", bookId);

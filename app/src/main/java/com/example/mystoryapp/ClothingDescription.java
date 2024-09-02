@@ -76,7 +76,7 @@ public class ClothingDescription extends AppCompatActivity {
                 .addOnSuccessListener(new com.google.android.gms.tasks.OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(ClothingDescription.this, "תיאור הלבוש נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(ClothingDescription.this, "תיאור הלבוש נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(ClothingDescription.this, BookName.class);
                         // Pass the bookId to HeroStoryQuestions
                         intent.putExtra("bookId", bookId);
