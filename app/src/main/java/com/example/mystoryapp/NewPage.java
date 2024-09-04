@@ -137,7 +137,7 @@ public class NewPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String text = editTextText2.getText().toString();
-                sendTextToServer(descriptionOfTheHeroOfStory + text +"תמונה בסגנון: " + selectedStyle );
+                sendTextToServer(descriptionOfTheHeroOfStory + text +"הכי חשוב שהתמונה תהיה בסגנון: " + selectedStyle );
             }
         });
 
@@ -219,21 +219,19 @@ public class NewPage extends AppCompatActivity {
                         String religion = snapshot.child("religion").getValue(String.class);
 
                         if (characterType.equals("man") || characterType.equals("boy")) {
-                            descriptionOfTheHeroOfStory = "הדמות הראשית הוא " + heroName + " שהוא " + characterType +
-                                    " בגיל " + age + ", וצבע העור שלו " + skinColor +
-                                    ", עם עיניים " + eyeColor + " ושיער " + hairType +
-                                    " בצבע " + hairColor + ", ולובש " + clothingDescription +
-                                    " והוא " + religion;
+                            descriptionOfTheHeroOfStory = heroName + " הוא " + characterType + " בגיל " + age +
+                                    ", עם עור בצבע " + skinColor + ", עיניים בצבע " + eyeColor +
+                                    ", שיער " + hairType + " בצבע " + hairColor + ", לובש " + clothingDescription +
+                                    " ו-" + religion + ". ";
                         } else if (characterType.equals("woman") || characterType.equals("girl")) {
-                            descriptionOfTheHeroOfStory = "הדמות הראשית היא " + heroName + " שהיא " + characterType +
-                                    " בגיל " + age + ", וצבע העור שלה " + skinColor +
-                                    ", עם עיניים " + eyeColor + " ושיער " + hairType +
-                                    " בצבע " + hairColor + ", ולובשת " + clothingDescription +
-                                    " והיא " + religion;
+                            descriptionOfTheHeroOfStory = heroName + " היא " + characterType + " בגיל " + age +
+                                    ", עם עור בצבע " + skinColor + ", עיניים בצבע " + eyeColor +
+                                    ", שיער " + hairType + " בצבע " + hairColor + ", לובשת " + clothingDescription +
+                                    " ו-" + religion + ". " ;
                         }
                     } else {
                         String animalType = snapshot.child("animalType").getValue(String.class);
-                        descriptionOfTheHeroOfStory = heroName + " הוא חיה מסוג: " + animalType;
+                        descriptionOfTheHeroOfStory = heroName + " הוא חיה מסוג: " + animalType + ". " ;
                     }
                 } else {
                     descriptionOfTheHeroOfStory = "";
