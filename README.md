@@ -1,29 +1,28 @@
 # AI My-Magic-Story Project
 
 ## Description
-AI My-Magic-Story הוא פרויקט שמטרתו לספק חוויית כתיבת סיפור אינטראקטיבית ומותאמת אישית לילדים. האפליקציה מאפשרת לילדים ליצור סיפורים משלהם בעזרת ממשק ידידותי וקל לשימוש. תוך כדי הכתיבה, האפליקציה משתמשת בבינה מלאכותית על מנת ליצור איורים מותאמים אישית לכל עמוד, אשר משלבים את הדמויות והסגנון כפי שהגדירו המשתמשים. האפליקציה מאפשרת חוויית סיפור ייחודית, מעוררת דמיון, ומשפרת את כישורי השפה והביטוי היצירתי של ילדים.
+AI My-Magic-Story is an application designed to provide an interactive, personalized storytelling experience for children. The app allows children to create their own stories with an easy-to-use, friendly interface. As they write, the app uses AI to generate customized illustrations for each page, matching the characters and style defined by the users. This app offers a unique storytelling experience, fostering imagination and enhancing children’s language and creative expression skills.
 
 ## Installation
-כדי להריץ את הפרויקט, נדרש להתקין את **Android Studio** ואת **JDK**. בנוסף, יש לעדכן את כל הכתובות של IP ו-PROT כך שיתאימו להגדרות המחשב האישי שלך.
+To run this project, you need to install **Android Studio** and **JDK**. Additionally, make sure to update all IP and PORT addresses to match your local computer settings.
 
-להסבר על איך למצוא את כתובת ה-IP והפורט שלך, אפשר לעיין במדריך של Microsoft כאן:
-[כיצד למצוא את כתובת ה-IP שלך](https://support.microsoft.com/he-il/windows/%D7%9E%D7%A6%D7%90-%D7%90%D7%AA-%D7%9B%D7%AA%D7%95%D7%91%D7%AA-%D7%94-ip-%D7%A9%D7%9C%D7%9A-windows-f21a9bbc-c582-55cd-35e0-73431160a1b9).
+For information on how to find your IP and PORT, refer to this Microsoft guide:  
+[How to find your IP address](https://support.microsoft.com/he-il/windows/%D7%9E%D7%A6%D7%90-%D7%90%D7%AA-%D7%9B%D7%AA%D7%95%D7%91%D7%AA-%D7%94-ip-%D7%A9%D7%9C%D7%9A-windows-f21a9bbc-c582-55cd-35e0-73431160a1b9).
 
-אלו הקבצים שבהם יש לעדכן את ה-IP והפורט:
+These are the files where you need to update the IP and PORT:
 1. `NewPage.java`
 2. `network_security_config.xml`
 
 ## Run the Application
-על מנת להפעיל את האפליקציה, יש להוריד את צד השרת מהמאגר הבא:  
+To run the application, you need to download the server side from the following repository:  
 [Project_backend Repository](https://github.com/OdeliaTamar/Project_backend.git)  
-יש לעיין בקובץ README שם כדי ללמוד כיצד להפעיל את צד השרת.
+Refer to the README there for instructions on how to start the server.
 
-### אפשרויות הרצה:
-1. **הרצת האפליקציה בסימולטור (emulator)**:  
-   ניתן לעיין במדריך של Android Studio כאן: [ניהול סימולטורים ב-Android Studio](https://developer.android.com/studio/run/managing-avds).
+### Run Options:
+1. **Run the app on an Emulator**:  
+   You can follow Android Studio's guide here: [Managing AVDs in Android Studio](https://developer.android.com/studio/run/managing-avds).
 
-2. **הרצת האפליקציה על מכשיר פיזי**:  
-   כדי להפעיל את האפליקציה על מכשיר אנדרואיד, יש לעיין במדריך: [הרצת האפליקציה על מכשיר פיזי](https://developer.android.com/studio/run/device).
+2. **Run the app on a Physical Device**:  
+   To run the app on an Android device, refer to this guide: [Running the app on a physical device](https://developer.android.com/studio/run/device).
 
-לאחר שהשרת פועל והגדרות החיבור נכונות, ניתן להפעיל את קובץ `MainActivity.java` כדי להתחיל בהרצת האפליקציה.
-
+Once the server is running and the connection settings are correct, open and run `MainActivity.java` to start the application.
