@@ -1,3 +1,9 @@
+/**
+ * HeroStoryQuestions - This activity allows the user to set up basic details about the hero for a storybook.
+ * The user can choose the hero's character type (such as child, girl, man, woman, or animal) and provide a hero name.
+ * For animal characters, an additional input for specifying the animal type is provided.
+ * After saving the details, the user is navigated to either BookName or DescribeHero depending on the character type.
+ */
 
 package com.example.mystoryapp;
 
@@ -20,19 +26,32 @@ import androidx.annotation.NonNull;
 
 public class HeroStoryQuestions extends AppCompatActivity {
 
+     // UI elements for hero details
     private EditText editTextHeroName;
     private EditText editTextAnimalType;
     private Button  buttonDescribeHero;
     private ImageButton buttonChild, buttonGirl, buttonMan, buttonWoman, buttonAnimal;
     private String characterType = "";
+
+    // Firebase references for authentication and database
     private FirebaseAuth firebaseAuth;
     private DatabaseReference booksRef;
     private String bookId;
 
+      /**
+     * Called when the activity is first created.
+     * Initializes the UI elements, retrieves the book ID, and sets up Firebase references.
+     * Sets up listeners for character type buttons and save button.
+     * @param savedInstanceState If the activity is being re-initialized after
+     * previously being shut down then this Bundle contains the data it most recently
+     * supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hero_story_questions);
+
+        // Initialize UI components
         editTextHeroName = findViewById(R.id.editTextHeroName);
         editTextAnimalType = findViewById(R.id.editTextAnimalType);
         buttonChild = findViewById(R.id.button_child);
@@ -42,11 +61,12 @@ public class HeroStoryQuestions extends AppCompatActivity {
         buttonAnimal = findViewById(R.id.button_animal);
         buttonDescribeHero = findViewById(R.id.button_describe_hero);
 
+        // Initialize Firebase Auth and Database reference
         firebaseAuth = FirebaseAuth.getInstance();
         booksRef = FirebaseDatabase.getInstance("https://mystory-2784d-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference("Books");
 
-        // Get the bookId passed from UserAccount
+         // Retrieve book ID from intent
         bookId = getIntent().getStringExtra("bookId");
         if (bookId == null) {
             Toast.makeText(HeroStoryQuestions.this, "Failed to get book ID", Toast.LENGTH_SHORT).show();
@@ -54,6 +74,7 @@ public class HeroStoryQuestions extends AppCompatActivity {
             return;
         }
 
+         // Set listener for character type buttons
         buttonAnimal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +83,7 @@ public class HeroStoryQuestions extends AppCompatActivity {
             }
         });
 
+        // Generic listener for selecting character type and handling button states
         View.OnClickListener setCharacterTypeListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +99,7 @@ public class HeroStoryQuestions extends AppCompatActivity {
                 // Set the clicked button as selected
                 v.setSelected(true);
 
+                 // Update character type based on selected button
                 int id = v.getId();
                 if (id == R.id.button_child) {
                     characterType = "boy";
@@ -93,12 +116,14 @@ public class HeroStoryQuestions extends AppCompatActivity {
             }
         };
 
+         // Apply the listener to character type buttons
         buttonChild.setOnClickListener(setCharacterTypeListener);
         buttonGirl.setOnClickListener(setCharacterTypeListener);
         buttonMan.setOnClickListener(setCharacterTypeListener);
         buttonWoman.setOnClickListener(setCharacterTypeListener);
         buttonAnimal.setOnClickListener(setCharacterTypeListener);
 
+        // Listener for the button to save hero details and navigate to the next activity
         buttonDescribeHero.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +133,10 @@ public class HeroStoryQuestions extends AppCompatActivity {
         });
     }
 
+     /**
+     * saveHeroDetails - Saves the hero's name and character type in Firebase.
+     * For animal characters, also saves the animal type.
+     */
     private void saveHeroDetails() {
         String heroName = editTextHeroName.getText().toString().trim();
         String animalType = editTextAnimalType.getText().toString().trim();
@@ -121,6 +150,10 @@ public class HeroStoryQuestions extends AppCompatActivity {
         }
     }
 
+   /**
+     * checkCharacterTypeAndNavigate - Checks the character type and navigates to the appropriate activity.
+     * If the character type is "חיה" (animal), navigates to BookName. Otherwise, navigates to DescribeHero.
+     */
     private void checkCharacterTypeAndNavigate() {
         booksRef.child(bookId).child("characterType").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
