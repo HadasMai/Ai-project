@@ -1,3 +1,9 @@
+/**
+ * PDFExporter - A utility class for exporting a book to a PDF file.
+ * This class generates a PDF document with a cover page, text content, and images for each page in the book.
+ * The PDF is saved to the device's Downloads directory.
+ */
+
 package com.example.mystoryapp;
 
 import android.app.Activity;
@@ -46,7 +52,14 @@ import java.util.concurrent.Executors;
 import com.itextpdf.io.util.StreamUtil;
 
 public class PDFExporter {
-
+/**
+     * exportBookToPDF - Exports a book with its content and images to a PDF file.
+     * Creates a new PDF document with each page’s text and image, and saves it in the Downloads directory.
+     * @param activity The activity context used for file access and displaying Toast messages.
+     * @param pages The list of pages to include in the PDF, with each page containing text and optional image URL.
+     * @param bookName The name of the book to be used as the PDF file name.
+     * @param authorName The name of the author to display on the cover page.
+     */
     public static void exportBookToPDF(Activity activity, List<ViewBook.Page> pages, String bookName, String authorName) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -54,6 +67,7 @@ public class PDFExporter {
             try {
                 Log.d("PDFExporter", "Starting PDF export for book: " + bookName);
 
+                // Set file name and path based on Android version
                 String fileName = bookName + "_" + System.currentTimeMillis() + ".pdf";
                 File pdfFile;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -73,6 +87,7 @@ public class PDFExporter {
                 PdfDocument pdf = new PdfDocument(writer);
                 Document document = new Document(pdf);
 
+                // Load Hebrew font for PDF content
                 AssetManager assetManager = activity.getAssets();
                 PdfFont hebrewFont;
 
@@ -87,7 +102,7 @@ public class PDFExporter {
                     hebrewFont = PdfFontFactory.createFont(fontBytes, PdfEncodings.IDENTITY_H);
                 }
 
-                // Add cover page
+                // Add cover and content pages to the document
                 addCoverPage(document, hebrewFont, bookName, authorName);
 
                 // Add content pages
@@ -99,6 +114,7 @@ public class PDFExporter {
                 document.close();
                 Log.d("PDFExporter", "PDF created successfully");
 
+               // Save PDF to device storage
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     ContentValues values = new ContentValues();
                     values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
@@ -134,6 +150,13 @@ public class PDFExporter {
         });
     }
 
+   /**
+     * addCoverPage - Adds a cover page to the PDF with the book title and author name.
+     * @param document The iText Document instance to add the cover page to.
+     * @param hebrewFont The font used for displaying Hebrew text.
+     * @param bookName The name of the book to display as the title.
+     * @param authorName The author’s name to display below the title.
+     */
     private static void addCoverPage(Document document, PdfFont hebrewFont, String bookName, String authorName) throws Exception {
         Paragraph titleParagraph = new Paragraph(new StringBuilder(bookName).reverse().toString())
                 .setFont(hebrewFont)
@@ -154,11 +177,20 @@ public class PDFExporter {
         document.add(new AreaBreak());
     }
 
+    /**
+     * addContentPage - Adds a content page to the PDF with text and optional image.
+     * @param document The iText Document instance to add the content to.
+     * @param pdf The iText PdfDocument instance for page-specific settings.
+     * @param hebrewFont The font used for displaying Hebrew text.
+     * @param page The page data containing text and optional image URL.
+     * @param activity The activity context used for loading images.
+     * @param totalPages The total number of pages in the book.
+     */
     private static void addContentPage(Document document, PdfDocument pdf, PdfFont hebrewFont, ViewBook.Page page, Activity activity, int totalPages) throws Exception {
         Log.d("PDFExporter", "Processing page " + page.getPageNumber());
 
+       // Prepare and add text content with RTL layout
         String pageText = page.getText();
-
         Paragraph paragraph = new Paragraph()
                 .setFont(hebrewFont)
                 .setFontSize(16)
@@ -183,6 +215,7 @@ public class PDFExporter {
 
         document.add(new Paragraph(" "));
 
+        // Load and add image if URL is available
         if (page.getUrl() != null && !page.getUrl().isEmpty()) {
             try {
                 String cleanUrl = page.getUrl().replace("\"", "");
