@@ -355,7 +355,8 @@ public class ViewBook extends AppCompatActivity {
         });
     }
 
-    public static class Page {
+   // Inner Page class 
+   public static class Page {
         private String bookId;
         private long pageNumber;
         private String text;
