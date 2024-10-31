@@ -1,3 +1,8 @@
+/**
+ * UserAccount - This activity represents the main user account interface.
+ * It allows the user to view a welcome message, navigate to book history, or create a new book.
+ */
+
 package com.example.mystoryapp;
 
 import android.content.Intent;
@@ -16,27 +21,43 @@ import java.util.HashMap;
 
 public class UserAccount extends AppCompatActivity {
 
+    // UI elements
     private TextView welcomeText;
     private Button myBooksHistoryBtn, createNewBookBtn;
+    
+    // Firebase authentication and database references
     private FirebaseAuth firebaseAuth;
     private DatabaseReference booksRef;
-    private String bookId;
     private DatabaseReference userRef;
+
+     // User and book identifiers
+    private String bookId;
     private  String uid ;
+    
+    /**
+     * Called when the activity is first created.
+     * Initializes UI elements, Firebase references, checks user authentication, and loads user information.
+     * Sets up listeners for creating a new book and opening book history.
+     * @param savedInstanceState If the activity is being re-initialized after
+     * previously being shut down then this Bundle contains the data it most recently
+     * supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_account);
 
+       // Initialize UI components
         welcomeText = findViewById(R.id.welcomeText);
         myBooksHistoryBtn = findViewById(R.id.myBooksHistoryBtn);
         createNewBookBtn = findViewById(R.id.createNewBookBtn);
 
+        // Initialize Firebase references
         firebaseAuth = FirebaseAuth.getInstance();
         booksRef = FirebaseDatabase.getInstance("https://mystory-2784d-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference("Books");
 
-        // בדיקת חיבור משתמש ל-Firebase
+        // Check if user is logged in
         if (firebaseAuth.getCurrentUser() == null) {
             Toast.makeText(UserAccount.this, "אין חיבור למשתמש", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(UserAccount.this, LoginActivity.class));
@@ -44,13 +65,14 @@ public class UserAccount extends AppCompatActivity {
             return;
         }
 
-        // אתחול המשתנה userRef
+        // Initialize user reference and load user information
         uid = firebaseAuth.getUid();
         userRef = FirebaseDatabase.getInstance("https://mystory-2784d-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference("Users").child(uid);
 
         loadUserInfo();
 
+        // Set click listeners for buttons
         createNewBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +88,9 @@ public class UserAccount extends AppCompatActivity {
         });
     }
 
+     /**
+     * loadUserInfo - Fetches and displays the user’s name as a welcome message.
+     */
     private void loadUserInfo() {
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -84,6 +109,10 @@ public class UserAccount extends AppCompatActivity {
         });
     }
 
+     /**
+     * createNewBook - Creates a new book entry in the Firebase database for the current user.
+     * Generates a unique book ID, stores the book data, and navigates to HeroStoryQuestions activity.
+     */
     private void createNewBook() {
        //uid = firebaseAuth.getUid();
         bookId = booksRef.push().getKey(); // Generate a unique book ID
@@ -93,6 +122,7 @@ public class UserAccount extends AppCompatActivity {
             return;
         }
 
+        // Store book data
         HashMap<String, Object> bookData = new HashMap<>();
         bookData.put("uid", uid);
         bookData.put("bookId", bookId);
@@ -102,7 +132,7 @@ public class UserAccount extends AppCompatActivity {
                 .addOnSuccessListener(new com.google.android.gms.tasks.OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        // Pass the bookId to HeroStoryQuestions
+                       // Navigate to HeroStoryQuestions with the new bookId
                         Intent intent = new Intent(UserAccount.this, HeroStoryQuestions.class);
                         intent.putExtra("bookId", bookId);
                         startActivity(intent);
@@ -116,6 +146,9 @@ public class UserAccount extends AppCompatActivity {
                 });
     }
 
+     /**
+     * openMyBooksHistory - Opens the MyBooksHistory activity where the user can view their books.
+     */
     private void openMyBooksHistory() {
         Intent intent = new Intent(UserAccount.this, MyBooksHistory.class);
         // Pass the bookId to HeroStoryQuestions
