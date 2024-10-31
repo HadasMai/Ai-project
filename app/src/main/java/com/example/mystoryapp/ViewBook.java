@@ -1,3 +1,9 @@
+/**
+ * ViewBook - An activity that allows users to view pages of a book, navigate through them,
+ * export the book as a PDF, and access options for home navigation and editing.
+ * This activity retrieves book data and pages from Firebase and displays each page’s text and image.
+ */
+
 package com.example.mystoryapp;
 
 import android.Manifest;
@@ -44,6 +50,7 @@ import android.widget.PopupMenu;
 import android.view.Gravity;
 public class ViewBook extends AppCompatActivity {
 
+   // UI elements for page display and navigation
     private TextView textView;
     private Button buttonPrevPage;
     private Button buttonNextPage;
@@ -51,6 +58,7 @@ public class ViewBook extends AppCompatActivity {
     private Button exportPdfButton;
     private Button menuButton;
 
+    // Firebase references and book/page data
     private DatabaseReference pagesRef;
     private DatabaseReference booksRef;
     private String bookId;
@@ -58,14 +66,23 @@ public class ViewBook extends AppCompatActivity {
     private int currentPageIndex;
     private DatabaseReference usersRef;
 
+    // Permission code for storage access
     private static final int STORAGE_PERMISSION_CODE = 1;
 
+   /**
+     * Called when the activity is first created.
+     * Initializes UI components, Firebase references, loads pages, and sets up button listeners.
+     * @param savedInstanceState If the activity is being re-initialized after
+     * previously being shut down then this Bundle contains the data it most recently
+     * supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         setContentView(R.layout.activity_view_book);
 
+       // Initialize UI components
         textView = findViewById(R.id.textStory);
         buttonPrevPage = findViewById(R.id.buttonPrevPage);
         buttonNextPage = findViewById(R.id.buttonNextPage);
@@ -80,6 +97,7 @@ public class ViewBook extends AppCompatActivity {
             }
         });
 
+       // Initialize Firebase references and bookId
         bookId = getIntent().getStringExtra("bookId");
 
         if (bookId == null) {
@@ -98,8 +116,10 @@ public class ViewBook extends AppCompatActivity {
         pages = new ArrayList<>();
         currentPageIndex = 0;
 
+        // Load book pages from Firebase
         fetchPagesFromFirebase();
 
+       // Set button listeners for navigation, export, and menu
         buttonPrevPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,6 +148,10 @@ public class ViewBook extends AppCompatActivity {
         });
     }
 
+    /**
+     * Displays a popup menu for navigating home, exporting as PDF, or editing the current page.
+     * @param v The view to anchor the popup menu.
+     */
     private void showPopupMenu(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         popup.getMenuInflater().inflate(R.menu.view_book_menu, popup.getMenu());
@@ -157,6 +181,10 @@ public class ViewBook extends AppCompatActivity {
         popup.show();
     }
 
+   /**
+     * fetchPagesFromFirebase - Loads pages associated with the bookId from Firebase and displays the first page.
+     * Sorts pages by page number before displaying them.
+     */
     private void fetchPagesFromFirebase() {
         Query query = pagesRef.orderByChild("bookId").equalTo(bookId);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -176,6 +204,7 @@ public class ViewBook extends AppCompatActivity {
                     }
                 });
 
+                // Sort pages by page number
                 if (!pages.isEmpty()) {
                     displayPage(pages.get(0));
                 } else {
@@ -192,6 +221,10 @@ public class ViewBook extends AppCompatActivity {
         });
     }
 
+     /**
+     * displayPage - Displays the text and image of a page.
+     * @param page The page to display.
+     */
     private void displayPage(Page page) {
         textView.setText(page.getText());
         if (page.getUrl() != null && !page.getUrl().isEmpty()) {
@@ -211,11 +244,19 @@ public class ViewBook extends AppCompatActivity {
         updateNavigationButtons();
     }
 
+   
+     /**
+     * updateNavigationButtons - Updates the visibility of navigation buttons based on the current page index.
+     */
     private void updateNavigationButtons() {
         buttonPrevPage.setVisibility(currentPageIndex > 0 ? View.VISIBLE : View.GONE);
         buttonNextPage.setVisibility(currentPageIndex < pages.size() - 1 ? View.VISIBLE : View.GONE);
     }
 
+    
+    /**
+     * requestStoragePermission - Requests storage permission if required for exporting to PDF.
+     */
     private void requestStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
@@ -267,6 +308,10 @@ public class ViewBook extends AppCompatActivity {
         }
     }
 
+    /**
+     * exportBookToPDF - Exports the book's pages to a PDF document and saves it.
+     * Retrieves book and user details from Firebase for inclusion in the PDF.
+     */
     private void exportBookToPDF() {
         booksRef.child(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
