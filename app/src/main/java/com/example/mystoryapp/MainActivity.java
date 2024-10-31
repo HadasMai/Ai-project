@@ -1,3 +1,9 @@
+/**
+ * MainActivity - This is the main launcher activity of the application.
+ * It initializes the application by launching the WelcomePage activity.
+ * When the user presses the back button, a confirmation dialog appears to confirm if they want to exit the app.
+ */
+
 package com.example.mystoryapp;
 
 import android.app.AlertDialog;
@@ -39,28 +45,39 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
-
+    // Tag for logging
     private static final String TAG = "MainActivity";
 
+   /**
+     * Called when the activity is first created.
+     * Initializes the UI and immediately starts the WelcomePage activity.
+     * @param savedInstanceState If the activity is being re-initialized after
+     * previously being shut down, this Bundle contains the data it most recently
+     * supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Launch the WelcomePage activity
         Intent intent = new Intent(MainActivity.this, WelcomePage.class);
         startActivity(intent);
     }
 
+    /**
+     * onBackPressed - Overrides the default back button behavior.
+     * When the back button is pressed, shows a confirmation dialog asking the user if they want to exit the application.
+     * If the user confirms, the app will close; otherwise, the dialog is dismissed.
+     */
     @Override
     public void onBackPressed() {
-        // יצירת חלון קופץ
         super.onBackPressed();
         new AlertDialog.Builder(this)
                 .setMessage("האם אתה בטוח שברצונך לצאת מהאפליקציה?")
                 .setCancelable(false)
                 .setPositiveButton("כן", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // סגור את האפליקציה
                         finishAffinity();
                     }
                 })
