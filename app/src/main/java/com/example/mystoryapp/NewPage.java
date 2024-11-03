@@ -1,3 +1,8 @@
+/**
+ * NewPage - An activity where users can create or edit a page within a book by adding text and generating an AI-generated image.
+ * Users can navigate between pages, generate images in selected styles, and save the page data to Firebase.
+ */
+
 package com.example.mystoryapp;
 
 import android.app.AlertDialog;
@@ -43,6 +48,7 @@ import okhttp3.Response;
 
 public class NewPage extends AppCompatActivity {
 
+    // UI elements and Firebase references
     private EditText editTextText2;
     private Button button;
     private Button reloadButton;
@@ -53,22 +59,34 @@ public class NewPage extends AppCompatActivity {
     private OkHttpClient client;
     private static final String TAG = "NewPage";
 
+    // Firebase and page data
     private DatabaseReference booksRef;
     private DatabaseReference pagesRef;
-    private String bookId;
+     private String bookId;
     private String descriptionOfTheHeroOfStory;
     private String lastGeneratedUrl;
     private long currentPageNumber;
     private String pageId;
     private boolean isEditing;
+
     private ProgressDialog progressDialog;
     private Spinner styleSpinner;
     private String selectedStyle;
+
+    
+   /**
+     * Called when the activity is first created.
+     * Initializes UI components, sets up Firebase references, and handles new page creation or editing.
+     * @param savedInstanceState If the activity is being re-initialized after
+     * previously being shut down then this Bundle contains the data it most recently
+     * supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_page);
 
+         // Initialize UI components
         editTextText2 = findViewById(R.id.editTextText2);
         button = findViewById(R.id.button);
         reloadButton = findViewById(R.id.reloadButton);
@@ -78,6 +96,7 @@ public class NewPage extends AppCompatActivity {
         buttonFinish = findViewById(R.id.EndButton);
         styleSpinner = findViewById(R.id.styleSpinner);
 
+        // Setup OkHttpClient with no timeout
         client = new OkHttpClient.Builder()
                 .connectTimeout(0, TimeUnit.SECONDS)
                 .writeTimeout(0, TimeUnit.SECONDS)
@@ -88,6 +107,7 @@ public class NewPage extends AppCompatActivity {
         progressDialog.setMessage("מכינים את התמונה עבורך, פעולה זו עשויה להימשך מספר שניות...");
         progressDialog.setCancelable(false);
 
+         // Get data from the intent
         bookId = getIntent().getStringExtra("bookId");
         isEditing = getIntent().getBooleanExtra("isEditing", false);
         currentPageNumber = getIntent().getLongExtra("pageNumber", 1);
@@ -98,6 +118,7 @@ public class NewPage extends AppCompatActivity {
             return;
         }
 
+        // Firebase references
         booksRef = FirebaseDatabase.getInstance("https://mystory-2784d-default-rtdb.asia-southeast1.firebasedatabase.app")
                 .getReference("Books");
         pagesRef = FirebaseDatabase.getInstance("https://mystory-2784d-default-rtdb.asia-southeast1.firebasedatabase.app")
@@ -133,6 +154,7 @@ public class NewPage extends AppCompatActivity {
             createNewPageInFirebase();
         }
 
+        // Set up button listeners for generating, navigating, and saving pages
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,6 +205,10 @@ public class NewPage extends AppCompatActivity {
         });
 
     }
+
+    /**
+     * showInstructionsDialog - Displays instructions to the user on how to create or edit pages.
+     */
     private void showInstructionsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(NewPage.this);
         builder.setTitle("הוראות");
@@ -200,6 +226,10 @@ public class NewPage extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+     /**
+     * fetchDataFromFirebase - Retrieves book data from Firebase to build a description of the story's hero.
+     */
     private void fetchDataFromFirebase() {
         booksRef.child(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -247,6 +277,10 @@ public class NewPage extends AppCompatActivity {
         });
     }
 
+     /**
+     * loadExistingPage - Loads existing page data for editing.
+     * @param pageNumber The number of the page to load.
+     */
     private void loadExistingPage(long pageNumber) {
         pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -259,11 +293,15 @@ public class NewPage extends AppCompatActivity {
                         String text = pageSnapshot.child("text").getValue(String.class);
                         String url = pageSnapshot.child("url").getValue(String.class);
                         String style = pageSnapshot.child("style").getValue(String.class);
+                        
+                        // Set the style spinner and text field
                         if (style != null && !style.isEmpty()) {
                             int spinnerPosition = ((ArrayAdapter) styleSpinner.getAdapter()).getPosition(style);
                             styleSpinner.setSelection(spinnerPosition);
                         }
                         editTextText2.setText(text);
+
+                        // Load image if URL is available
                         if (url != null && !url.isEmpty()) {
                             loadImage(url);
                             lastGeneratedUrl = url;
@@ -291,6 +329,10 @@ public class NewPage extends AppCompatActivity {
         });
     }
 
+    
+     /**
+     * createNewPageInFirebase - Creates a new page in Firebase and sets it as the current page.
+     */
     private void createNewPageInFirebase() {
         pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -377,6 +419,11 @@ public class NewPage extends AppCompatActivity {
         });
     }
 
+   
+     /**
+     * loadImage - Loads an image from a URL and displays it in the ImageView.
+     * @param url The URL of the image.
+     */
     private void loadImage(String url) {
         Log.d(TAG, "Loading image from URL: " + url);
 
@@ -408,6 +455,11 @@ public class NewPage extends AppCompatActivity {
                 .into(imageView);
     }
 
+    /**
+     * updatePageInFirebase - Updates page data (text, URL, style) in Firebase.
+     * @param text The text content of the page.
+     * @param url The URL of the generated image.
+     */
     private void updatePageInFirebase(final String text, final String url) {
         if (pageId != null) {
             HashMap<String, Object> pageData = new HashMap<>();
@@ -423,6 +475,10 @@ public class NewPage extends AppCompatActivity {
 //            Toast.makeText(NewPage.this, "Page ID is null", Toast.LENGTH_SHORT).show();
 //        }
     }
+   
+    /**
+     * updateNavigationButtons - Updates the visibility of navigation buttons based on the current page.
+     */
     private void updateNavigationButtons() {
         buttonPrevPage.setVisibility(currentPageNumber > 1 ? View.VISIBLE : View.GONE);
         pagesRef.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
